@@ -1,0 +1,160 @@
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: 
+		url('../fonts/roboto-v20-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+		url('../fonts/roboto-v20-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: local(''),
+       url('../fonts/roboto-v20-latin-500.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/roboto-v20-latin-500.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local(''),
+		url('../fonts/roboto-v20-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+		url('../fonts/roboto-v20-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  src: local(''),
+		url('../fonts/roboto-v20-latin-900.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+		url('../fonts/roboto-v20-latin-900.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+*,
+*::before,
+*::after {
+	box-sizing: inherit; 
+}
+input, textarea, select { font-family:inherit; font-size:inherit;font-weight:inherit;line-height:inherit}
+html {
+	box-sizing: border-box; 
+}
+
+body {
+	font-family: 'Roboto', Arial, sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 19px;
+	color: black;
+  max-width: 1440px;
+  margin: 0 auto;
+	& header {
+		margin-bottom: 15px;
+	}
+}
+.header, .main {
+  max-width: 80vw;
+  margin: 0 auto;
+}
+.header {
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.button-login {
+  height: 40px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+  border: 2px solid #000;
+  cursor: pointer;
+  overflow: hidden; 
+}
+.select {
+  width: 200px;
+    height: 40px;
+    font-size: 14px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: 2px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.main {
+  & .select {
+    margin-left: 5%;
+    margin-bottom: 40px;
+  }
+  & .film-galary__wrapper {
+    margin-bottom: 40px;
+  }
+  & .pagination {
+    margin-bottom: 40px;
+  }
+}
+.film-galary__wrapper {
+  width: 90%;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+  align-content: flex-start;
+  justify-content: center;
+  grid-row-gap: 50px;
+  grid-column-gap: 25px;
+}
+/**
+  функция repeat() позволяет повторять колонки сколько угодно раз
+  auto-fill ЗАПОЛНЯЕТ строку максимально возможным числом колонок
+  функция minmax() задаen минимальную ширину колонок, чтобы они не стали очень узкими
+*/
+
+.film-galary__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+}
+.film-galary__img {
+  overflow: hidden; /*Контет обрезается, без предоставления прокрутки.*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #D6D6D6;
+  border-radius: 5px;
+}
+
+/*______________________Пагинация____________________________*/
+// .pagination-wrapper {
+//   text-align: center;
+// }
+.pagination {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  & a {
+    color: black;
+    // float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
+    margin-bottom: 8px;
+  }
+  &  a.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+  }
+  & a:hover:not(.active) {background-color: #ddd;}
+  & a:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+  & a:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
