@@ -109,20 +109,32 @@ body {
   функция minmax() задаen минимальную ширину колонок, чтобы они не стали очень узкими
 */
 
-.film-galary__item {
+.film-item {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
-  height: auto;
+	position: relative;
+  width: 200px;
+  height: 300px;
+	&:hover .by-hover {
+		display: block;
+
+	}
 }
-.film-galary__img {
+.film-img {
   overflow: hidden; /*Контет обрезается, без предоставления прокрутки.*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #D6D6D6;
+	display: block;
+	width: 200px;
+  height: 300px;
   border-radius: 5px;
+}
+.by-hover {
+	position: absolute;
+	width: 100%;
+	// display: block;
+	display: none;
+	background-color: white;
+	bottom: 15px; /* Положение от нижнего края */
 }
 
 /*______________________Пагинация____________________________*/
@@ -133,7 +145,7 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  & a {
+  & .pagination-item {
     color: black;
     // float: left;
     padding: 8px 16px;
@@ -142,17 +154,17 @@ body {
     margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
     margin-bottom: 8px;
   }
-  &  a.active {
+  &  .pagination-item.active {
     background-color: #4CAF50;
     color: white;
     border: 1px solid #4CAF50;
   }
-  & a:hover:not(.active) {background-color: #ddd;}
-  & a:first-child {
+  & .pagination-item:hover:not(.active) {background-color: #ddd;}
+  & .pagination-item:first-child {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
-  & a:last-child {
+  & .pagination-item:last-child {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
