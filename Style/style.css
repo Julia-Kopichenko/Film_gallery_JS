@@ -179,4 +179,12 @@ body header {
   border-bottom-right-radius: 5px;
 }
 
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
 /*# sourceMappingURL=style.css.map */
