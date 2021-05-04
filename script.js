@@ -32,12 +32,6 @@ window.addEventListener('DOMContentLoaded', function () {
 	const paginationSet3End = 15;
 
 	//! Функция получений данных по запросу. Нам возвращается промис. 
-	//* 	function(result) { /* обработает успешное выполнение */ },
-	//* 	function(error) { /* обработает ошибку */ }
-	//* );
-	// Запрос прошел успешно и мы получили данные (response). Сервер нам отдает JSON-файл. Его надо распарсить, т.е.превратить в обычный массив
-	//*response.json() – декодирует ответ в формате JSON
-	
 	async function getResponseByPage(pageNumber) { // возвращает промис
 		const result = await fetch(`${url}&page=${pageNumber}`)
 			.then(response => response.json())
@@ -99,7 +93,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		} else {
 			nextPagesElement.classList.remove(HIDDEN);
 		}
-
+		// переопределение id и нумурации кнопок
 		delta = isForward ? -5: 5; 
 		for (let i = start; i <= end; i++) {
 			let currentElem = pagination.querySelector(`#${PAGE}${i + delta}`);
@@ -108,7 +102,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		}
 	}
 
-	//! Предварительная предзагрузка  первых страниц
+	//! Предварительная предзагрузка  первых страниц (под вопросом)
 	let pageNumbersArr = [1, 2, 3, 4, 5];
 	let buferPag1, buferPag2, buferPag3, buferPag4, buferPag5;
 	let buferArr = [buferPag1, buferPag2, buferPag3, buferPag4, buferPag5];
@@ -119,7 +113,6 @@ window.addEventListener('DOMContentLoaded', function () {
 		}
 	}
 	feelBufer(pageNumbersArr,buferArr);
-	
 	//! Функция создания карточек фильмов (в параметр - промис)
 	async function createFilmCard(responsePromise) {
 		let response = await responsePromise;
@@ -142,10 +135,27 @@ window.addEventListener('DOMContentLoaded', function () {
 			galary.appendChild(card);
 		});
 	}
+	//! функция добавляет стиль 'active'
+	function addActiveClass(element) {
+		element.classList.add('active');
+	}
+	//! функция удаляет стиль 'active'
+	function removeActiveClass(targetArray) {
+		targetArray.forEach(element => {
+			element.classList.remove('active');
+		})
+	}
 
-	// ! Пэджинация
+	// !------------------------------------------ PAGINATION START-----------------------------------------
 
 	let paginationItems = document.querySelectorAll('.pagination-item'); // все кнопки пагинации
+	
+	//! функция перехода на секциии страниц в обоих направлениях (активный первый элемент секции)
+	function changePageSection(paginationSetStart, paginationSetEnd, isForward) {
+		updatePaginationItems(paginationSetStart, paginationSetEnd, isForward); // перерисовываем кнопки пагинации
+		createFilmCard(getResponseByPage(paginationSetStart)); // прорисовываем стартовую страницу секции страницу
+		addActiveClass(pagination.querySelector(`#${PAGE}${paginationSetStart}`)); // добавляем класс к кнопке стартовой страницы
+	}
 
 	paginationItems.forEach(element => {
 
@@ -167,7 +177,6 @@ window.addEventListener('DOMContentLoaded', function () {
 				} else {
 					createFilmCard(getResponseByPage(pageNumber));
 				}
-
 			}
 			// если клик по кнопке 'First'
 			if (eventTarget.id === firstPageId) {
@@ -191,34 +200,29 @@ window.addEventListener('DOMContentLoaded', function () {
 			}
 			// если клик по многоточию (следующие 5 страниц)
 			if (eventTarget.id === nextPagesId) {
+
 				if (pagination.querySelector(`#${PAGE}${paginationSet1Start}`)) { // если сейчас на странице есть id=page1
-					updatePaginationItems(paginationSet2Start, paginationSet2End, true); // перерисовываем кнопки пагинации
-					createFilmCard(getResponseByPage(paginationSet2Start)); // прорисовываем 6-ю страницу
-					addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet2Start}`)); // добавляем класс к кнопке 6й страницы
+					changePageSection(paginationSet2Start, paginationSet2End, true);
 				} else {
-					updatePaginationItems(paginationSet3Start, paginationSet3End, true);
-					createFilmCard(getResponseByPage(paginationSet3Start));  // прорисовываем 11-ю страницу
-					addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet3Start}`));
+					changePageSection(paginationSet3Start, paginationSet3End, true);
 				}
 			}
 			// если клик по многоточию (предыдущие 5 страниц)
 			if (eventTarget.id === prevPagesId) {
+
 				if (pagination.querySelector(`#${PAGE}${paginationSet3End}`)) { // если сейчас на странице есть id=page15
-					updatePaginationItems(paginationSet2Start, paginationSet2End, false);
-					createFilmCard(getResponseByPage(paginationSet2Start)); // прорисовываем 6-ю страницу
-					addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet2Start}`)); // добавляем класс Active к кнопке 6й 
+					changePageSection(paginationSet2Start, paginationSet2End, false);
 				} else {
-					updatePaginationItems(paginationSet1Start, paginationSet1End, false);
-					createFilmCard(buferArr[0]); // прорисовываем 1-ю страницу
-					addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet1Start}`));
+					changePageSection(paginationSet1Start, paginationSet1End, false);
 				}
 			}
 			// если клик по Next
 			if (eventTarget.id === nextPageId) {
+
 				if (activePageNumber === paginationSet1End) {
-						// дёрнуть nextPagesId на 6,10,тру
+					changePageSection(paginationSet2Start, paginationSet2End, true);
 				} else if (activePageNumber === paginationSet2End) {
-					// дёрнуть nextPagesId на 11,15,тру
+					changePageSection(paginationSet3Start, paginationSet3End, true);
 				} else if (activePageNumber === paginationSet3End) {
 					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber}`));
 				} else {
@@ -226,36 +230,29 @@ window.addEventListener('DOMContentLoaded', function () {
 					createFilmCard(getResponseByPage(activePageNumber + 1));
 				}
 			}
-
-
-			// 	if (pagination.querySelector(`#${PAGE}${paginationSet1Start}`)) { // если сейчас на странице есть id=page1
-			// 		updatePaginationItems(paginationSet2Start, paginationSet2End, true); // перерисовываем кнопки пагинации
-			// 		createFilmCard(getResponseByPage(paginationSet2Start)); // прорисовываем 6-ю страницу
-			// 		addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet2Start}`)); // добавляем класс к кнопке 6й страницы
-			// 	} else {
-			// 		updatePaginationItems(paginationSet3Start, paginationSet3End, true);
-			// 		createFilmCard(getResponseByPage(paginationSet3Start));  // прорисовываем 11-ю страницу
-			// 		addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet3Start}`));
-			// 	}
-			// }
 			// если клик по Prev
-			// ! переделать в функции
+			if (eventTarget.id === prevPageId) {
 
-		
-			
+				if (activePageNumber === paginationSet2Start) {
+					updatePaginationItems(paginationSet1Start, paginationSet1End, false); // перерисовываем кнопки пагинации
+					createFilmCard(getResponseByPage(activePageNumber - 1)); // прорисовываем стартовую страницу секции страницу
+					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber - 1}`)); 
+				} else if (activePageNumber === paginationSet3Start) {
+					updatePaginationItems(paginationSet2Start, paginationSet2End, false); 
+					createFilmCard(getResponseByPage(activePageNumber - 1)); 
+					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber - 1}`));
+				} else if (activePageNumber === paginationSet1Start) {
+					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber}`));
+				} else {
+					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber - 1}`));
+					createFilmCard(getResponseByPage(activePageNumber - 1));
+				}
+			}
 		});
-		
 	});
-	// функция добавляет стиль 'active'
-	function addActiveClass(element) {
-		element.classList.add('active');
-	}
-	// функция удаляет стиль 'active'
-	function removeActiveClass(targetArray) {
-		targetArray.forEach(element => {
-			element.classList.remove('active');
-		})
-	}
+	// !------------------------------------------ PAGINATION END-----------------------------------------
+
+	// !------------------------------------------ФИЛЬТРАЦИЯ START-----------------------------------------
 	
 	
 
