@@ -8,14 +8,24 @@
 // https://image.tmdb.org/t/p/w200${film.poster_path}
 // Там где доллар и скобки будет часть объекта
 
+// Фильтры сортировки по рейтингу(vote_rating) и дате релиза(release_date) по убыванию/возрастанию. 
+// При переходе на другие страницы с фильмами, параметры сортировки сохраняются.
+
 // обраб.событий, который запускает скрипты, когда дом-дерево готово (Событие DOMContentLoaded происходит когда весь HTML был полностью загружен и пройден парсером, не дожидаясь окончания загрузки таблиц стилей, изображений и фреймов.)
 // в виде ф-ции запускаем скрипт, который внутри
 
 
+
 window.addEventListener('DOMContentLoaded', function () {
-	let url = 'https://api.themoviedb.org/3/discover/movie?api_key=43042c8dc5edb5f45ccc79e88d4730b0';
+	const apiKey = '43042c8dc5edb5f45ccc79e88d4730b0';
+	let sortBy = 'popularity.desc'; // default
+	// let sortBy = 'vote_average.desc'; // default
+	const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
+	const filmInfoURI = '/filmInfo.html';
+	const genresURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`
 	let galary = document.querySelector('.film-galary'); // секция с фильмами
 	let pagination = document.querySelector('.pagination'); // секция с кнопками пагинации
+	const homeLink = document.querySelector('.header-home-link');
 	const PAGE = 'page';
 	const HIDDEN = 'hidden';
 	const prevPagesId = 'prev5Pages';
@@ -32,13 +42,46 @@ window.addEventListener('DOMContentLoaded', function () {
 	const paginationSet3End = 15;
 
 	//! Функция получений данных по запросу. Нам возвращается промис. 
-	async function getResponseByPage(pageNumber) { // возвращает промис
-		const result = await fetch(`${url}&page=${pageNumber}`)
-			.then(response => response.json())
-			.then(response => response = response.results);
+	// ключевое слово async перед функцией гарантирует, что эта функция в любом случае вернёт промис
+	async function getResponseByPage(pageNumber, sortBy) { 
+		const result = await fetch(`${url}&sort_by=${sortBy}&page=${pageNumber}`)
+			.then(data => data.json())
+			.then(data => data.results);
 		return result;
 	}
-	createFilmCard(getResponseByPage(1)); // грузим  сразу 1-ю страницу
+
+// https://api.themoviedb.org/3/genre/movie/list?api_key=43042c8dc5edb5f45ccc79e88d4730b0&language=en-US
+
+//! Жанры
+async function getGenres() { 
+	const result = await fetch(genresURL)
+		.then(data => data.json())
+		.then(data => data.genres);
+	return result;
+}
+async function updateGenresLocalStorage(genres) {
+	localStorage.setItem('genres', JSON.stringify(await genres))
+}
+updateGenresLocalStorage(getGenres());
+
+	function updateFilmsLocalStorage(filmList) {
+		localStorage.setItem('filmsInfo', JSON.stringify(filmList))
+	}
+	//! Предварительная предзагрузка  первых страниц (под вопросом)
+	let pageNumbersArr = [1, 2, 3, 4, 5]; // страницы, которые будут сохранены в буфер
+	let buferPag1, buferPag2, buferPag3, buferPag4, buferPag5;
+	let buferArr = [buferPag1, buferPag2, buferPag3, buferPag4, buferPag5];
+
+	function feelBufer(pagesArr, buferArr) {
+		for (let i = 0; i < pagesArr.length; i++) {
+			buferArr[i] = getResponseByPage(pagesArr[i], sortBy);
+		}
+		// console.log(buferArr);
+	}
+	feelBufer(pageNumbersArr,buferArr);
+
+	// createFilmCard(buferArr[0]); // грузим  сразу 1-ю страницу
+	createFilmCard(getResponseByPage(1, sortBy)); // грузим  сразу 1-ю страницу
 
 	//! Динамическая загрузка пагинации кнопок
 	function createPaginationItems(start, end) {
@@ -73,8 +116,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		`;
 	}
 	createPaginationItems(paginationSet1Start, paginationSet1End);
-
-//! Функция перерисовки кнопок пагинации
+	//! Функция перерисовки кнопок пагинации
 	function updatePaginationItems(start, end, isForward) {
 		 // isForward - булевая переменная = true идем в прямом поряке, false - в обратном
 		let delta;
@@ -101,40 +143,39 @@ window.addEventListener('DOMContentLoaded', function () {
 			currentElem.setAttribute('id', `${PAGE}${i}`);
 		}
 	}
-
-	//! Предварительная предзагрузка  первых страниц (под вопросом)
-	let pageNumbersArr = [1, 2, 3, 4, 5];
-	let buferPag1, buferPag2, buferPag3, buferPag4, buferPag5;
-	let buferArr = [buferPag1, buferPag2, buferPag3, buferPag4, buferPag5];
-
-	function feelBufer(pagesArr, buferArr) {
-		for (let i = 0; i < pagesArr.length; i++) {
-			buferArr[i] = getResponseByPage(pagesArr[i]);
-		}
-	}
-	feelBufer(pageNumbersArr,buferArr);
 	//! Функция создания карточек фильмов (в параметр - промис)
+	// слово – await можно использовать только внутри async-функций.
+	// Ключевое слово await заставит интерпретатор JavaScript ждать до тех пор, пока промис справа от await не выполнится. После чего оно вернёт его результат, и выполнение кода продолжится.
+	
 	async function createFilmCard(responsePromise) {
 		let response = await responsePromise;
+		updateFilmsLocalStorage(response);
 
 		galary.innerHTML = ''; 
 		response.forEach(element => {
 			let card = document.createElement('li');
-
+			let elementId = element.id;
 			card.classList.add('film-item');
 			card.innerHTML = `
-				<a href='#'>
-          <img src='https://image.tmdb.org/t/p/w200${element.poster_path}' alt='Name of film' class='film-img'>
+				<h2 class='film-title flex-center'>${element.title}</h2>  
+				<a class='film-item-link' id=${elementId} href='${filmInfoURI}?id=${elementId}' target='_blank'>
+          <img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
         </a>
-				<div class = 'by-hover'>
-					<h2 class = 'film-title'>${element.title}</h2>
-					<p class = 'film-raiting'>Рейтинг: ${element.vote_average}</p>
-					<p class = 'film-release-date'>Дата релиза: ${element.release_date}</p>
+				<div class='by-hover'>
+					<p>Рейтинг: ${element.vote_average}</p>
+					<p>Дата релиза: ${element.release_date}</p>
 				</div>
 				`;
 			galary.appendChild(card);
 		});
 	}
+	//! Событие клик по кнопке "Дом"
+	homeLink.addEventListener('click',function() {
+		removeActiveClass(paginationItems); // вызов функции удалить стиль 'active' со всех айтемов
+		sortBy = 'popularity.desc';
+		feelBufer(pageNumbersArr,buferArr);
+		showFirstPageBySort();
+	});
 	//! функция добавляет стиль 'active'
 	function addActiveClass(element) {
 		element.classList.add('active');
@@ -153,8 +194,19 @@ window.addEventListener('DOMContentLoaded', function () {
 	//! функция перехода на секциии страниц в обоих направлениях (активный первый элемент секции)
 	function changePageSection(paginationSetStart, paginationSetEnd, isForward) {
 		updatePaginationItems(paginationSetStart, paginationSetEnd, isForward); // перерисовываем кнопки пагинации
-		createFilmCard(getResponseByPage(paginationSetStart)); // прорисовываем стартовую страницу секции страницу
+		createFilmCard(getResponseByPage(paginationSetStart, sortBy)); // прорисовываем стартовую страницу секции страницу
 		addActiveClass(pagination.querySelector(`#${PAGE}${paginationSetStart}`)); // добавляем класс к кнопке стартовой страницы
+	}
+
+	//! функция отображения первой страницы (активный первый элемент секции)
+	function showFirstPageBySort(){
+		if (pagination.querySelector(`#${PAGE}${paginationSet3Start}`)) {
+			updatePaginationItems(paginationSet2Start, paginationSet2End, false); // перерисовываем кнопки пагинации
+		} if (pagination.querySelector(`#${PAGE}${paginationSet2Start}`)) {
+			updatePaginationItems(paginationSet1Start, paginationSet1End, false); // перерисовываем кнопки пагинации
+		}
+		createFilmCard(buferArr[0]);
+		addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet1Start}`)); // добавляем класс Active к кнопке 1й 
 	}
 
 	paginationItems.forEach(element => {
@@ -175,18 +227,12 @@ window.addEventListener('DOMContentLoaded', function () {
 				if (pageNumber <= paginationSet1End) {
 					createFilmCard(buferArr[pageNumber-1]);
 				} else {
-					createFilmCard(getResponseByPage(pageNumber));
+					createFilmCard(getResponseByPage(pageNumber, sortBy));
 				}
 			}
 			// если клик по кнопке 'First'
 			if (eventTarget.id === firstPageId) {
-				if (pagination.querySelector(`#${PAGE}${paginationSet3Start}`)) {
-					updatePaginationItems(paginationSet2Start, paginationSet2End, false); // перерисовываем кнопки пагинации
-				} if (pagination.querySelector(`#${PAGE}${paginationSet2Start}`)) {
-					updatePaginationItems(paginationSet1Start, paginationSet1End, false); // перерисовываем кнопки пагинации
-				}
-				createFilmCard(buferArr[0]);
-				addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet1Start}`)); // добавляем класс Active к кнопке 1й 
+				showFirstPageBySort();
 			}
 			// если клик по кнопке 'Last'
 			if (eventTarget.id === lastPageId) {
@@ -195,7 +241,7 @@ window.addEventListener('DOMContentLoaded', function () {
 				} if (pagination.querySelector(`#${PAGE}${paginationSet2Start}`)) {
 					updatePaginationItems(paginationSet3Start, paginationSet3End, true); // перерисовываем кнопки пагинации
 				}
-				createFilmCard(getResponseByPage(paginationSet3End)); // прорисовываем 6-ю страницу
+				createFilmCard(getResponseByPage(paginationSet3End, sortBy)); // прорисовываем 6-ю страницу
 				addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet3End}`)); // добавляем класс Active к кнопке 1й 
 			}
 			// если клик по многоточию (следующие 5 страниц)
@@ -227,7 +273,7 @@ window.addEventListener('DOMContentLoaded', function () {
 					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber}`));
 				} else {
 					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber + 1}`));
-					createFilmCard(getResponseByPage(activePageNumber + 1));
+					createFilmCard(getResponseByPage(activePageNumber + 1, sortBy));
 				}
 			}
 			// если клик по Prev
@@ -235,26 +281,73 @@ window.addEventListener('DOMContentLoaded', function () {
 
 				if (activePageNumber === paginationSet2Start) {
 					updatePaginationItems(paginationSet1Start, paginationSet1End, false); // перерисовываем кнопки пагинации
-					createFilmCard(getResponseByPage(activePageNumber - 1)); // прорисовываем стартовую страницу секции страницу
+					createFilmCard(getResponseByPage(activePageNumber - 1, sortBy)); // прорисовываем стартовую страницу секции страницу
 					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber - 1}`)); 
 				} else if (activePageNumber === paginationSet3Start) {
 					updatePaginationItems(paginationSet2Start, paginationSet2End, false); 
-					createFilmCard(getResponseByPage(activePageNumber - 1)); 
+					createFilmCard(getResponseByPage(activePageNumber - 1, sortBy)); 
 					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber - 1}`));
 				} else if (activePageNumber === paginationSet1Start) {
 					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber}`));
 				} else {
 					addActiveClass(pagination.querySelector(`#${PAGE}${activePageNumber - 1}`));
-					createFilmCard(getResponseByPage(activePageNumber - 1));
+					createFilmCard(getResponseByPage(activePageNumber - 1, sortBy));
 				}
 			}
 		});
 	});
+
 	// !------------------------------------------ PAGINATION END-----------------------------------------
 
 	// !------------------------------------------ФИЛЬТРАЦИЯ START-----------------------------------------
-	
-	
 
-	
+	const selectElement = document.querySelector('select');
+	selectElement.addEventListener('change', function(event) {
+		let eventTarget = event.target.value;
+
+		removeActiveClass(paginationItems); // вызов функции удалить стиль 'active' со всех айтемов
+		switch (eventTarget) {
+			case 'ratingDown':
+				sortBy = 'vote_average.desс';
+				feelBufer(pageNumbersArr,buferArr);
+				showFirstPageBySort();
+				break;
+			case 'ratingUp':
+				sortBy = 'vote_average.asc';
+				feelBufer(pageNumbersArr,buferArr);
+				showFirstPageBySort();
+				break;
+			case 'dateReleaseDown':
+				sortBy = 'release_date.desc';
+				feelBufer(pageNumbersArr,buferArr);
+				showFirstPageBySort();
+				break;
+			case 'dateReleaseUp':
+				sortBy = 'release_date.asc';
+				feelBufer(pageNumbersArr,buferArr);
+				showFirstPageBySort();
+				break;
+			case 'popularityDown':
+				sortBy = 'popularity.desc';
+				feelBufer(pageNumbersArr,buferArr);
+				showFirstPageBySort();
+				break;
+		}
+	});
+	// !------------------------------------------ФИЛЬТРАЦИЯ END-----------------------------------------
+
 });
+
+// Если пользователь переходит на страницу с фильмом, то он видит всю информацию по фильму целиком: 
+// название (title) - element.title, 
+// обзор: (overview) - element.overview, 
+// жанр: genres, 
+// популярность: - element.popularity, 
+// дата релиза: element.release_date, 
+// рейтинг: element.vote_average, 
+// количество голосов: element.vote_count 
+// Для получения жанров использовать API 
+// https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=your_key
+
+
+

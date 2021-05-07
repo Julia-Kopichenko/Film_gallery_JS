@@ -49,9 +49,10 @@ body {
   font-size: 16px;
   font-weight: 500;
   line-height: 19px;
-  color: black;
+  color: white;
   max-width: 1440px;
   margin: 0 auto;
+  background-color: black;
 }
 body header {
   margin-bottom: 15px;
@@ -74,19 +75,26 @@ body header {
   background-color: transparent;
   background-repeat: no-repeat;
   border-radius: 5px;
-  border: 2px solid #000;
+  color: white;
+  border: 2px solid white;
   cursor: pointer;
   overflow: hidden;
+}
+
+.header-img {
+  fill: white;
 }
 
 .select {
   width: 200px;
   height: 40px;
+  color: white;
   font-size: 14px;
-  background-color: transparent;
+  background-color: black;
   background-repeat: no-repeat;
-  border: 2px solid #000;
+  border: 2px solid white;
   border-radius: 5px;
+  padding: 8px;
   cursor: pointer;
 }
 
@@ -118,18 +126,32 @@ body header {
   функция minmax() задаen минимальную ширину колонок, чтобы они не стали очень узкими
 */
 .film-item {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  align-content: flex-end;
   align-items: center;
   position: relative;
   width: 200px;
-  height: 300px;
 }
 .film-item:hover .by-hover {
   display: block;
+  color: black;
+}
+.film-item .film-title {
+  margin-bottom: 10px;
 }
 
-.film-img {
+.film-title {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.film-item-img {
   overflow: hidden;
   /*Контет обрезается, без предоставления прокрутки.*/
   display: block;
@@ -154,7 +176,7 @@ body header {
   flex-wrap: wrap;
 }
 .pagination .pagination-item {
-  color: black;
+  color: white;
   padding: 8px 16px;
   text-decoration: none;
   border: 1px solid #ddd;
@@ -185,6 +207,37 @@ body header {
 
 .hidden {
   display: none;
+}
+
+/*--------------------------------------для страницы с фильмом-----------------------*/
+.film-info-wrapper {
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  padding: 30px;
+  padding-top: 100px;
+}
+.film-info-wrapper .film-item-wrapper {
+  margin-right: 20px;
+}
+.film-info-wrapper .film-title {
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: rgba(188, 156, 248, 0.747);
+}
+.film-info-wrapper p {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+.film-info-wrapper p span {
+  font-size: 19px;
+  font-weight: 900;
+  color: rgba(188, 156, 248, 0.747);
+}
+
+.film-item-text {
+  width: 60%;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -45,9 +45,10 @@ body {
 	font-size: 16px;
 	font-weight: 500;
 	line-height: 19px;
-	color: black;
+	color: white;
   max-width: 1440px;
   margin: 0 auto;
+  background-color: black;
 	& header {
 		margin-bottom: 15px;
 	}
@@ -67,19 +68,25 @@ body {
   background-color: transparent;
   background-repeat: no-repeat;
   border-radius: 5px;
-  border: 2px solid #000;
+  color: white;
+  border: 2px solid white;
   cursor: pointer;
   overflow: hidden; 
 }
+.header-img {
+  fill: white;
+}
 .select {
   width: 200px;
-    height: 40px;
-    font-size: 14px;
-    background-color: transparent;
-    background-repeat: no-repeat;
-    border: 2px solid #000;
-    border-radius: 5px;
-    cursor: pointer;
+  height: 40px;
+  color: white;
+  font-size: 14px;
+  background-color: black;
+  background-repeat: no-repeat;
+  border: 2px solid white;
+  border-radius: 5px;
+  padding: 8px;
+  cursor: pointer;
 }
 .main {
   & .select {
@@ -110,18 +117,29 @@ body {
 */
 
 .film-item {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  align-content: flex-end;
   align-items: center;
 	position: relative;
   width: 200px;
-  height: 300px;
 	&:hover .by-hover {
 		display: block;
-
+    color: black;
 	}
+  & .film-title {
+    margin-bottom: 10px;
+  }
 }
-.film-img {
+.film-title {
+  font-weight: 700;
+  font-size: 20px;
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.film-item-img {
   overflow: hidden; /*Контет обрезается, без предоставления прокрутки.*/
 	display: block;
 	width: 200px;
@@ -138,15 +156,12 @@ body {
 }
 
 /*______________________Пагинация____________________________*/
-// .pagination-wrapper {
-//   text-align: center;
-// }
 .pagination {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   & .pagination-item {
-    color: black;
+    color: white;
     padding: 8px 16px;
     text-decoration: none;
     border: 1px solid #ddd;
@@ -174,4 +189,35 @@ body {
 }
 .hidden {
   display: none;
+}
+/*--------------------------------------для страницы с фильмом-----------------------*/
+.film-info-wrapper {
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  // background-color: rgb(211, 13, 13);
+  padding: 30px;
+  padding-top: 100px;
+  & .film-item-wrapper {
+    margin-right: 20px;
+  }
+  & .film-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: rgba(188, 156, 248, 0.747);
+  }
+  & p {
+    font-weight: 500;
+    margin-bottom: 20px;
+    & span {
+      font-size: 19px;
+      font-weight: 900;
+      color: rgba(188, 156, 248, 0.747);
+    }
+  }
+}
+.film-item-text {
+  width: 60%;
+  // background-color: rgb(13, 211, 23);
 }
