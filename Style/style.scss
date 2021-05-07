@@ -40,15 +40,18 @@ html {
 	box-sizing: border-box; 
 }
 
+$textColor: #adbac7;
+$dark: #2d333b;
+
 body {
 	font-family: 'Roboto', Arial, sans-serif;
 	font-size: 16px;
 	font-weight: 500;
 	line-height: 19px;
-	color: white;
+	color: $textColor;
   max-width: 1440px;
   margin: 0 auto;
-  background-color: black;
+  background-color: $dark;
 	& header {
 		margin-bottom: 15px;
 	}
@@ -68,25 +71,30 @@ body {
   background-color: transparent;
   background-repeat: no-repeat;
   border-radius: 5px;
-  color: white;
-  border: 2px solid white;
+  color: $textColor;
+  border: 2px solid $textColor;
   cursor: pointer;
   overflow: hidden; 
 }
 .header-img {
-  fill: white;
+  fill: $textColor;
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 .select {
   width: 200px;
   height: 40px;
-  color: white;
-  font-size: 14px;
-  background-color: black;
+  color: $textColor;
+  font-size: 15px;
+  background-color: #2d333b;
   background-repeat: no-repeat;
-  border: 2px solid white;
+  border: 2px solid $textColor;
   border-radius: 5px;
   padding: 8px;
   cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
 }
 .main {
   & .select {
@@ -151,7 +159,7 @@ body {
 	width: 100%;
 	// display: block;
 	display: none;
-	background-color: white;
+	background-color: $textColor;
 	bottom: 15px; /* Положение от нижнего края */
 }
 
@@ -161,7 +169,7 @@ body {
   justify-content: center;
   flex-wrap: wrap;
   & .pagination-item {
-    color: white;
+    color: $textColor;
     padding: 8px 16px;
     text-decoration: none;
     border: 1px solid #ddd;
@@ -170,7 +178,7 @@ body {
   }
   &  .pagination-item.active {
     background-color: #4CAF50;
-    color: white;
+    color: $textColor;
     border: 1px solid #4CAF50;
   }
   & .pagination-item:hover:not(.active) {background-color: #ddd;}
@@ -196,7 +204,7 @@ body {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  // background-color: rgb(211, 13, 13);
+  flex-wrap: wrap;
   padding: 30px;
   padding-top: 100px;
   & .film-item-wrapper {

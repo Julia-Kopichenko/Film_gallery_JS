@@ -175,6 +175,8 @@ updateGenresLocalStorage(getGenres());
 		sortBy = 'popularity.desc';
 		feelBufer(pageNumbersArr,buferArr);
 		showFirstPageBySort();
+		// сбросить значение сортировки
+		selectElement.value = 'popularityDown';
 	});
 	//! функция добавляет стиль 'active'
 	function addActiveClass(element) {

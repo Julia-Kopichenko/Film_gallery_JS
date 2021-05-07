@@ -49,10 +49,10 @@ body {
   font-size: 16px;
   font-weight: 500;
   line-height: 19px;
-  color: white;
+  color: #adbac7;
   max-width: 1440px;
   margin: 0 auto;
-  background-color: black;
+  background-color: #2d333b;
 }
 body header {
   margin-bottom: 15px;
@@ -75,27 +75,32 @@ body header {
   background-color: transparent;
   background-repeat: no-repeat;
   border-radius: 5px;
-  color: white;
-  border: 2px solid white;
+  color: #adbac7;
+  border: 2px solid #adbac7;
   cursor: pointer;
   overflow: hidden;
 }
 
 .header-img {
-  fill: white;
+  fill: #adbac7;
+}
+.header-img:hover {
+  transform: scale(1.1);
 }
 
 .select {
   width: 200px;
   height: 40px;
-  color: white;
-  font-size: 14px;
-  background-color: black;
+  color: #adbac7;
+  font-size: 15px;
+  background-color: #2d333b;
   background-repeat: no-repeat;
-  border: 2px solid white;
+  border: 2px solid #adbac7;
   border-radius: 5px;
   padding: 8px;
   cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .main .select {
@@ -164,7 +169,7 @@ body header {
   position: absolute;
   width: 100%;
   display: none;
-  background-color: white;
+  background-color: #adbac7;
   bottom: 15px;
   /* Положение от нижнего края */
 }
@@ -176,7 +181,7 @@ body header {
   flex-wrap: wrap;
 }
 .pagination .pagination-item {
-  color: white;
+  color: #adbac7;
   padding: 8px 16px;
   text-decoration: none;
   border: 1px solid #ddd;
@@ -186,7 +191,7 @@ body header {
 }
 .pagination .pagination-item.active {
   background-color: #4CAF50;
-  color: white;
+  color: #adbac7;
   border: 1px solid #4CAF50;
 }
 .pagination .pagination-item:hover:not(.active) {
@@ -215,6 +220,7 @@ body header {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   padding: 30px;
   padding-top: 100px;
 }
