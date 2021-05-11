@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import "normalize.css";
 @font-face {
   font-family: "Roboto";
   font-style: normal;
@@ -70,17 +71,147 @@ body header {
   align-items: center;
 }
 
-.button-login {
-  height: 40px;
-  background-color: transparent;
-  background-repeat: no-repeat;
+/*----------КНОПОЧКИ---------*/
+.button {
+  display: inline-block;
+  padding: 6px 25px;
   border-radius: 5px;
-  color: #adbac7;
-  border: 2px solid #adbac7;
-  cursor: pointer;
+  border: 0;
+  /*сбрасываем контур (для тега button)*/
   overflow: hidden;
+  text-align: center;
+  font-family: "Roboto", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #2d333b;
+  cursor: pointer;
+}
+.button:hover {
+  border: 1px solid #FBC832;
+  box-shadow: 0px 2px 8px #FBC832;
+  /*макет*/
+  animation-name: button-secondary-hover;
+  /*имя анимации*/
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
+  animation-fill-mode: forwards;
+}
+.button:focus {
+  outline: none;
 }
 
+.button-login {
+  background-color: transparent;
+  color: #adbac7;
+  border: 2px solid #adbac7;
+}
+
+.form__button-type {
+  /*+++*/
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-primary,
+.button-secondary {
+  width: 180px;
+  background-position: 50% 50%;
+  /*в центрe начинаем анимацию*/
+}
+.button-primary:hover,
+.button-secondary:hover {
+  color: #000000;
+  box-shadow: 0px 2px 4px #2d333b;
+}
+.button-primary:focus-visible,
+.button-secondary:focus-visible {
+  border: 3px solid #6B6B6B;
+  color: #242424;
+}
+.button-primary:active,
+.button-secondary:active {
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
+  animation-fill-mode: forwards;
+}
+
+.button-primary {
+  background-color: #FBC832;
+}
+.button-primary:hover {
+  background-image: radial-gradient(circle, #FFDF86 10%, transparent 10%);
+  /*создала радиальный градиент с формой "круг" и прозрачностью в 10%*/
+}
+.button-primary:active {
+  /*pressed на макете*/
+  color: #000000;
+  background-image: radial-gradient(circle, #FFBB0C 10%, transparent 10%);
+  animation-name: button-primary-active;
+  /*имя анимации*/
+}
+.button-primary:disabled {
+  /*disabled на макете*/
+  color: #6B6B6B;
+  background-color: #FFE28E;
+}
+
+.button-secondary {
+  /*button-white*/
+  border: 2px solid #FBC832;
+  background-color: #F6F6F6;
+}
+.button-secondary:hover {
+  background-image: radial-gradient(circle, #FFFFFF 10%, transparent 10%);
+  /*создала радиальный градиент с формой "круг" и прозрачностью в 20%*/
+}
+.button-secondary:active {
+  color: #242424;
+  border: 3px solid #FFBC00;
+  background-image: radial-gradient(circle, rgba(255, 196, 30, 0.2) 10%, transparent 10%);
+  /*создала радиальный градиент с формой "круг" и прозрачностью в 20%*/
+  animation-name: button-secondary-active;
+  /*имя анимации*/
+}
+.button-secondary:disabled {
+  color: #6B6B6B;
+  background-color: #F6F6F6;
+  border: 2px solid #B3B3B3;
+}
+
+@keyframes button-primary-hover {
+  from {
+    background-size: 0% 0%;
+  }
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+@keyframes button-primary-active {
+  from {
+    background-size: 0% 0%;
+  }
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+@keyframes button-secondary-hover {
+  from {
+    background-size: 0% 0%;
+  }
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+@keyframes button-secondary-active {
+  from {
+    background-size: 0% 0%;
+  }
+  to {
+    background-size: 1000% 1000%;
+  }
+}
 .header-img {
   fill: #adbac7;
 }
@@ -101,6 +232,11 @@ body header {
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
+}
+.select:hover {
+  border: 1px solid #FBC832;
+  box-shadow: 0px 2px 8px #FBC832;
+  /*макет*/
 }
 
 .main .select {
@@ -134,20 +270,27 @@ body header {
   display: grid;
   align-content: flex-end;
   align-items: center;
-  position: relative;
   width: 200px;
-}
-.film-item:hover .by-hover {
-  display: block;
-  color: black;
 }
 .film-item .film-title {
   margin-bottom: 10px;
 }
 
+.film-item-link {
+  position: relative;
+  display: block;
+}
+.film-item-link:hover .by-hover {
+  box-shadow: 0px 2px 8px #FBC832;
+  /*макет*/
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .film-title {
   font-weight: 700;
   font-size: 20px;
+  text-align: center;
 }
 
 .flex-center {
@@ -163,15 +306,26 @@ body header {
   width: 200px;
   height: 300px;
   border-radius: 5px;
+  box-shadow: 0px 4px 8px black;
+  /*макет*/
+}
+.film-item-img:hover {
+  box-shadow: 0px 2px 8px #FBC832;
+  /*макет*/
 }
 
 .by-hover {
+  color: black;
   position: absolute;
+  left: 0;
+  bottom: 0;
   width: 100%;
-  display: none;
+  height: auto;
+  padding: 15px 5px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: transform 0.3s linear;
   background-color: #adbac7;
-  bottom: 15px;
-  /* Положение от нижнего края */
 }
 
 /*______________________Пагинация____________________________*/
@@ -190,9 +344,9 @@ body header {
   margin-bottom: 8px;
 }
 .pagination .pagination-item.active {
-  background-color: #4CAF50;
-  color: #adbac7;
-  border: 1px solid #4CAF50;
+  background-color: #FBC832;
+  color: #2d333b;
+  border: 1px solid #FBC832;
 }
 .pagination .pagination-item:hover:not(.active) {
   background-color: #ddd;
@@ -214,36 +368,4 @@ body header {
   display: none;
 }
 
-/*--------------------------------------для страницы с фильмом-----------------------*/
-.film-info-wrapper {
-  width: 60%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  padding: 30px;
-  padding-top: 100px;
-}
-.film-info-wrapper .film-item-wrapper {
-  margin-right: 20px;
-}
-.film-info-wrapper .film-title {
-  font-size: 28px;
-  margin-bottom: 30px;
-  color: rgba(188, 156, 248, 0.747);
-}
-.film-info-wrapper p {
-  font-weight: 500;
-  margin-bottom: 20px;
-}
-.film-info-wrapper p span {
-  font-size: 19px;
-  font-weight: 900;
-  color: rgba(188, 156, 248, 0.747);
-}
-
-.film-item-text {
-  width: 60%;
-}
-
-/*# sourceMappingURL=style.css.map */
+/*# sourceMappingURL=globalStyle.css.map */

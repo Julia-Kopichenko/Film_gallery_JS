@@ -38,4 +38,3 @@ filmInfo.innerHTML = `
   <p><span>Обзор:</span> ${element.overview}</p>
 </div>
 `;
-

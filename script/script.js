@@ -8,32 +8,26 @@
 // https://image.tmdb.org/t/p/w200${film.poster_path}
 // Там где доллар и скобки будет часть объекта
 
-// Фильтры сортировки по рейтингу(vote_rating) и дате релиза(release_date) по убыванию/возрастанию. 
-// При переходе на другие страницы с фильмами, параметры сортировки сохраняются.
-
 // обраб.событий, который запускает скрипты, когда дом-дерево готово (Событие DOMContentLoaded происходит когда весь HTML был полностью загружен и пройден парсером, не дожидаясь окончания загрузки таблиц стилей, изображений и фреймов.)
 // в виде ф-ции запускаем скрипт, который внутри
-
-
-
 window.addEventListener('DOMContentLoaded', function () {
 	const apiKey = '43042c8dc5edb5f45ccc79e88d4730b0';
 	let sortBy = 'popularity.desc'; // default
-	// let sortBy = 'vote_average.desc'; // default
-	const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
+	// const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
+	const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=ru-RU`;
 	const filmInfoURI = '/filmInfo.html';
-	const genresURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`
+	const genresURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=ru-RU`;
 	let galary = document.querySelector('.film-galary'); // секция с фильмами
 	let pagination = document.querySelector('.pagination'); // секция с кнопками пагинации
 	const homeLink = document.querySelector('.header-home-link');
 	const PAGE = 'page';
 	const HIDDEN = 'hidden';
-	const prevPagesId = 'prev5Pages';
-	const nextPagesId = 'next5Pages';
-	const firstPageId = 'firstPage';
-	const lastPageId = 'lastPage';
-	const prevPageId = 'prevPage';
-	const nextPageId = 'nextPage';
+	const prevPagesId = 'prev5Pages',
+				nextPagesId = 'next5Pages',
+				firstPageId = 'firstPage',
+				lastPageId = 'lastPage',
+				prevPageId = 'prevPage',
+				nextPageId = 'nextPage';
 	const paginationSet1Start = 1; // номер первой страницы первого блока из 5ти страниц
 	const paginationSet1End = 5;
 	const paginationSet2Start = 6; // номер первой страницы второго блока из 5ти страниц
@@ -43,26 +37,25 @@ window.addEventListener('DOMContentLoaded', function () {
 
 	//! Функция получений данных по запросу. Нам возвращается промис. 
 	// ключевое слово async перед функцией гарантирует, что эта функция в любом случае вернёт промис
-	async function getResponseByPage(pageNumber, sortBy) { 
-		const result = await fetch(`${url}&sort_by=${sortBy}&page=${pageNumber}`)
+	async function getResponseByPage(pageNumber, sortBy) {
+		let urlFilms = `${url}&sort_by=${sortBy}&page=${pageNumber}&vote_count.gte=10`;
+		const result = await fetch(urlFilms)
 			.then(data => data.json())
 			.then(data => data.results);
 		return result;
 	}
 
-// https://api.themoviedb.org/3/genre/movie/list?api_key=43042c8dc5edb5f45ccc79e88d4730b0&language=en-US
-
-//! Жанры
-async function getGenres() { 
-	const result = await fetch(genresURL)
-		.then(data => data.json())
-		.then(data => data.genres);
-	return result;
-}
-async function updateGenresLocalStorage(genres) {
-	localStorage.setItem('genres', JSON.stringify(await genres))
-}
-updateGenresLocalStorage(getGenres());
+	//! Жанры
+	async function getGenres() { 
+		const result = await fetch(genresURL)
+			.then(data => data.json())
+			.then(data => data.genres);
+		return result;
+	}
+	async function updateGenresLocalStorage(genres) {
+		localStorage.setItem('genres', JSON.stringify(await genres))
+	}
+	updateGenresLocalStorage(getGenres());
 
 	function updateFilmsLocalStorage(filmList) {
 		localStorage.setItem('filmsInfo', JSON.stringify(filmList))
@@ -76,12 +69,10 @@ updateGenresLocalStorage(getGenres());
 		for (let i = 0; i < pagesArr.length; i++) {
 			buferArr[i] = getResponseByPage(pagesArr[i], sortBy);
 		}
-		// console.log(buferArr);
 	}
 	feelBufer(pageNumbersArr,buferArr);
 
-	// createFilmCard(buferArr[0]); // грузим  сразу 1-ю страницу
-	createFilmCard(getResponseByPage(1, sortBy)); // грузим  сразу 1-ю страницу
+	createFilmCard(buferArr[0]); // грузим  сразу 1-ю страницу
 
 	//! Динамическая загрузка пагинации кнопок
 	function createPaginationItems(start, end) {
@@ -160,11 +151,11 @@ updateGenresLocalStorage(getGenres());
 				<h2 class='film-title flex-center'>${element.title}</h2>  
 				<a class='film-item-link' id=${elementId} href='${filmInfoURI}?id=${elementId}' target='_blank'>
           <img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
-        </a>
-				<div class='by-hover'>
+					<div class='by-hover'>
 					<p>Рейтинг: ${element.vote_average}</p>
 					<p>Дата релиза: ${element.release_date}</p>
-				</div>
+					</div>
+				</a>
 				`;
 			galary.appendChild(card);
 		});
@@ -298,11 +289,9 @@ updateGenresLocalStorage(getGenres());
 			}
 		});
 	});
-
 	// !------------------------------------------ PAGINATION END-----------------------------------------
 
 	// !------------------------------------------ФИЛЬТРАЦИЯ START-----------------------------------------
-
 	const selectElement = document.querySelector('select');
 	selectElement.addEventListener('change', function(event) {
 		let eventTarget = event.target.value;
@@ -310,7 +299,7 @@ updateGenresLocalStorage(getGenres());
 		removeActiveClass(paginationItems); // вызов функции удалить стиль 'active' со всех айтемов
 		switch (eventTarget) {
 			case 'ratingDown':
-				sortBy = 'vote_average.desс';
+				sortBy = 'vote_average.desc';
 				feelBufer(pageNumbersArr,buferArr);
 				showFirstPageBySort();
 				break;
@@ -320,12 +309,14 @@ updateGenresLocalStorage(getGenres());
 				showFirstPageBySort();
 				break;
 			case 'dateReleaseDown':
-				sortBy = 'release_date.desc';
+				// sortBy = 'release_date.desc';
+				sortBy = 'primary_release_date.desc';
 				feelBufer(pageNumbersArr,buferArr);
 				showFirstPageBySort();
 				break;
 			case 'dateReleaseUp':
-				sortBy = 'release_date.asc';
+				// sortBy = 'release_date.asc';
+				sortBy = 'primary_release_date.asc';
 				feelBufer(pageNumbersArr,buferArr);
 				showFirstPageBySort();
 				break;
@@ -338,18 +329,21 @@ updateGenresLocalStorage(getGenres());
 	});
 	// !------------------------------------------ФИЛЬТРАЦИЯ END-----------------------------------------
 
+	//! Добавим админа и еще одного пользователя из файла JSON
+	let usersAll = [];
+
+	if (localStorage.getItem('users')) {
+			usersAll = JSON.parse(localStorage.getItem('users'));
+		} else {
+			localStorage.setItem('users', users);
+		}
+		
+		function updateUsersLocalStorage() {
+			localStorage.setItem('users', JSON.stringify(usersAll));
+		}
+
+
+
 });
-
-// Если пользователь переходит на страницу с фильмом, то он видит всю информацию по фильму целиком: 
-// название (title) - element.title, 
-// обзор: (overview) - element.overview, 
-// жанр: genres, 
-// популярность: - element.popularity, 
-// дата релиза: element.release_date, 
-// рейтинг: element.vote_average, 
-// количество голосов: element.vote_count 
-// Для получения жанров использовать API 
-// https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=your_key
-
 
 

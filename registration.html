@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./Style/forms.css">
+	<title>Регистрация</title>
+</head>
+<body>
+	<header class="header">
+    <a href="/index.html" class="header-home-link" title="Home">
+			<svg class="header-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+			<path style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal" d="M 24.962891 1.0546875 A 1.0001 1.0001 0 0 0 24.384766 1.2636719 L 1.3847656 19.210938 A 1.0005659 1.0005659 0 0 0 2.6152344 20.789062 L 4 19.708984 L 4 46 A 1.0001 1.0001 0 0 0 5 47 L 18.832031 47 A 1.0001 1.0001 0 0 0 19.158203 47 L 30.832031 47 A 1.0001 1.0001 0 0 0 31.158203 47 L 45 47 A 1.0001 1.0001 0 0 0 46 46 L 46 19.708984 L 47.384766 20.789062 A 1.0005657 1.0005657 0 1 0 48.615234 19.210938 L 41 13.269531 L 41 6 L 35 6 L 35 8.5859375 L 25.615234 1.2636719 A 1.0001 1.0001 0 0 0 24.962891 1.0546875 z M 25 3.3222656 L 44 18.148438 L 44 45 L 32 45 L 32 26 L 18 26 L 18 45 L 6 45 L 6 18.148438 L 25 3.3222656 z M 37 8 L 39 8 L 39 11.708984 L 37 10.146484 L 37 8 z M 20 28 L 30 28 L 30 45 L 20 45 L 20 28 z" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"/>
+    	</svg>
+    </a>
+		<!-- <button type="button" class="button-login button">Sing In/Sign Up</button> -->
+  </header>
+
+	<main class="main">
+		<form id="registration-form" method="POST">
+			<div class="registration-content form__container">
+				<h2 class="form__title">Registration</h2>
+				<hr size="1" color="#EEBF3A">
+				<div class="form__text-block">
+					<label for="name">Name</label>
+					<input type="text" name="name" id="signup-name" placeholder="Name" 
+					data-rule="length" data-from = "6" required>
+					<span class="confirmMessage"></span>
+	
+					<label for="surname">Surname</label>
+					<input type="text" name="surname" id="signup-surname" placeholder="Surname"	
+					data-rule="length" data-from = "6" required>
+					<span class="confirmMessage"></span>
+	
+					<label for="psw">Password</label>
+					<input type="password" name="psw" id="signup-psw" placeholder="Password" 
+					data-rule="length" data-from = "6" required>
+					<span class="confirmMessage"></span>
+	
+					<label for="psw-repeat">Password</label>
+					<input type="password" name="psw-repeat" id="signup-psw-repeat" placeholder="Confirm Password" 
+					data-rule="psw-repeat" data-from = "6" required>
+					<span class="confirmMessage"></span>
+	
+					<!-- <span class="confirmMessage"></span> -->
+					<label for="email">Email</label>
+					<input type="text" name="email" id="signup-email" placeholder="Email" 
+					data-rule="email" required>
+					<span class="confirmMessage"></span>
+	
+				</div>
+				<div class="form__button-type">
+					<button class="button button-primary form__button-primary" id="signup-submit" type="button">Sign Up</button>
+					<button class="button button-secondary" id="signup-clear" type="reset">Clear</button>
+				</div>
+			</div>
+		</form>
+	</main>
+  <script src="./script/Registration.js"></script>
+</body>
+</html>

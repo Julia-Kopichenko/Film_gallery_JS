@@ -1,0 +1,107 @@
+window.addEventListener('DOMContentLoaded', function () {
+	const signupSubmitBtn = document.querySelector('#signup-submit');
+	const signupClearBtn = document.querySelector('#signup-clear');
+	
+	//! вАЛИДАЦИЯ
+	let regEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
+
+	// Метод test() выполняет поиск сопоставления регулярного выражения указанной строке. Возвращает true или false.
+	// найдем все инпуты, которые должны валидировать свое содержимое (у которых есть data-rule)
+	let inputs = document.querySelectorAll('input[data-rule]');
+	let psw = document.querySelector('#signup-psw');
+	
+	for (let input of inputs) {
+		input.addEventListener('blur', function () {
+			// прочитаем правило
+			let rule = this.dataset.rule;
+			// читаем содержимое инпута
+			let value = this.value;
+			// message = this.value;
+			let message = this.nextElementSibling;
+			let check;
+
+			switch (rule) {
+				case 'length':
+					if (value.length > +this.dataset.from) {
+						check = true;
+						message.innerHTML = '';
+					} else {
+						check = false;
+						message.innerHTML = `Длина более ${this.dataset.from} символов`;
+					}
+					break;
+				case 'email':
+					check = regEmail.test(value);
+					if (check) {
+						message.innerHTML = '';
+					} else {
+						message.innerHTML = 'Введите корректный электронный адрес';
+					}
+					break;
+				case 'psw-repeat':
+					if (value === psw.value && value !== '') {
+						check = true;
+						message.innerHTML = '';
+					} else {
+						check = false;
+						message.innerHTML = 'Попробуйте еще раз';
+					}
+					break;
+			}
+
+			if (check) {
+				this.classList.remove('invalid');
+				this.classList.add('valid');
+			} else {
+				this.classList.remove('valid');
+				this.classList.add('invalid');
+			}
+		});
+	}
+
+	let usersAll = [];
+	
+	usersAll = JSON.parse(localStorage.getItem('users'));
+	
+	function updateUsersLocalStorage() {
+		localStorage.setItem('users', JSON.stringify(usersAll));
+	}
+	//! при нажатии на кнопку SIGN UP
+	signupSubmitBtn.addEventListener('click', function () {
+		let name = document.querySelector('#signup-name').value;
+		let surName = document.querySelector('#signup-surname').value;
+		let password = document.querySelector('#signup-psw').value;
+		let email = document.querySelector('#signup-email').value;
+		let user = {
+			'name': name,
+			'surName': surName,
+			'password': password,
+			'email': email,
+			'isAdmin': false
+		}
+
+		usersAll.push(user);
+		updateUsersLocalStorage();
+		clearForm();
+		// event.preventDefault();
+		// вызвать функцию домой
+	});
+
+	//! при нажатии на кнопку Clear
+	signupClearBtn.addEventListener('click', function () {
+		clearForm();
+	})
+	//! Функция очистки формы
+	function clearForm() {
+		inputs.forEach(input => {
+			input.classList.remove('invalid');
+			input.classList.remove('valid');
+			input.value = '';
+			input.nextElementSibling.innerHTML = '';
+		})
+	}
+
+
+
+
+});
