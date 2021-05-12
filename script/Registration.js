@@ -11,7 +11,8 @@ window.addEventListener('DOMContentLoaded', function () {
 	let psw = document.querySelector('#signup-psw');
 	
 	for (let input of inputs) {
-		input.addEventListener('blur', function () {
+		// input.addEventListener('blur', function () {
+		input.oninput = function() {
 			// прочитаем правило
 			let rule = this.dataset.rule;
 			// читаем содержимое инпута
@@ -19,44 +20,52 @@ window.addEventListener('DOMContentLoaded', function () {
 			// message = this.value;
 			let message = this.nextElementSibling;
 			let check;
-
-			switch (rule) {
-				case 'length':
-					if (value.length > +this.dataset.from) {
-						check = true;
-						message.innerHTML = '';
-					} else {
-						check = false;
-						message.innerHTML = `Длина более ${this.dataset.from} символов`;
+			if (value.length > 0) {
+				switch (rule) {
+					case 'length':
+						if (value.length > +this.dataset.from) {
+							check = true;
+							message.innerHTML = '';
+						} else {
+							check = false;
+							message.innerHTML = `Длина должна быть более ${this.dataset.from} символов`;
+						}
+						break;
+					case 'email':
+						check = regEmail.test(value);
+						if (check) {
+							message.innerHTML = '';
+						} else {
+							message.innerHTML = 'Введите корректный электронный адрес';
+						}
+						break;
+					case 'psw-repeat':
+						if (value === psw.value && value !== '') {
+							check = true;
+							message.innerHTML = '';
+						} else {
+							check = false;
+							message.innerHTML = 'Попробуйте еще раз';
+						}
+						break;
+				}
+	
+				if (check) {
+					this.classList.remove('invalid');
+					this.classList.add('valid');
+					if (allInputsAreValid()) {
+						//снять аттрибут и класс disabled
+						signupSubmitBtn.classList.remove('button-disabled');
+						signupSubmitBtn.classList.add('button-primary');
+						signupSubmitBtn.removeAttribute('disabled');
 					}
-					break;
-				case 'email':
-					check = regEmail.test(value);
-					if (check) {
-						message.innerHTML = '';
-					} else {
-						message.innerHTML = 'Введите корректный электронный адрес';
-					}
-					break;
-				case 'psw-repeat':
-					if (value === psw.value && value !== '') {
-						check = true;
-						message.innerHTML = '';
-					} else {
-						check = false;
-						message.innerHTML = 'Попробуйте еще раз';
-					}
-					break;
+				} else {
+					this.classList.remove('valid');
+					this.classList.add('invalid');
+				}
 			}
-
-			if (check) {
-				this.classList.remove('invalid');
-				this.classList.add('valid');
-			} else {
-				this.classList.remove('valid');
-				this.classList.add('invalid');
-			}
-		});
+			
+		};
 	}
 
 	let usersAll = [];
@@ -66,6 +75,19 @@ window.addEventListener('DOMContentLoaded', function () {
 	function updateUsersLocalStorage() {
 		localStorage.setItem('users', JSON.stringify(usersAll));
 	}
+	//! функция проверки на валидность всех полей
+	function allInputsAreValid() {
+		let isValid = true;
+		let allInputs = document.querySelectorAll('input');
+		for (let i = 0; i < allInputs.length; i++) {
+			if(!allInputs[i].classList.contains('valid')) {
+				isValid = false;
+				break;
+			}
+		}
+		return isValid;
+	}
+	
 	//! при нажатии на кнопку SIGN UP
 	signupSubmitBtn.addEventListener('click', function () {
 		let name = document.querySelector('#signup-name').value;
@@ -82,9 +104,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
 		usersAll.push(user);
 		updateUsersLocalStorage();
+
 		clearForm();
-		// event.preventDefault();
-		// вызвать функцию домой
+		location.href='/index.html';
 	});
 
 	//! при нажатии на кнопку Clear

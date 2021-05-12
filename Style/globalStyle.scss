@@ -14,7 +14,16 @@ html {
 $lightColor: #adbac7;
 $darkColor: #2d333b;
 $yellowColor:#FBC832;
-
+a {
+	background: transparent;
+	text-decoration: none;
+}
+.visibility-hidden {
+  visibility: hidden;
+}
+.hidden {
+  display: none;
+}
 body {
 	font-family: 'Roboto', Arial, sans-serif;
 	font-size: 16px;
@@ -22,6 +31,7 @@ body {
 	line-height: 19px;
 	color: $lightColor;
   max-width: 1440px;
+	padding: 20px;
   margin: 0 auto;
   background-color: $darkColor;
 	& header {
@@ -29,136 +39,14 @@ body {
 	}
 }
 .header, .main {
-  max-width: 80vw;
+  max-width: 90%;
   margin: 0 auto;
 }
 .header {
   height: 100px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-/*----------КНОПОЧКИ---------*/
-.button {
-	display: inline-block;
-	padding: 6px 25px;
-	border-radius: 5px;
-	border: 0; /*сбрасываем контур (для тега button)*/
-	overflow: hidden; 
-	// text-decoration: none; /*для ссылочной кнопки убирает подчеркивание*/
-	text-align: center;
-	font-family: 'Roboto', Arial, sans-serif;
-	font-weight: 500;
-	font-size: 20px;
-	color: $darkColor;
-	cursor: pointer;
-	&:hover { 
-    border: 1px solid $yellowColor;
-		box-shadow: 0px 2px 8px $yellowColor; /*макет*/
-		animation-name: button-secondary-hover; /*имя анимации*/
-		animation-duration: 0.5s;
-		animation-iteration-count: 1; /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
-		animation-fill-mode:forwards; 
-	}
-	&:focus {
-		outline: none;
-	}
-}
-.button-login {
-  background-color: transparent;
-  color: $lightColor;
-  border: 2px solid $lightColor;
-}
-
-
-.form__button-type { /*+++*/
 	display: flex;
 	justify-content: space-between;
-}
-.button-primary,
-.button-secondary {
-	width: 180px;
-	background-position: 50% 50%; /*в центрe начинаем анимацию*/
-	&:hover {
-		color: #000000;
-		box-shadow: 0px 2px 4px $darkColor;
-	}
-	&:focus-visible {
-		border: 3px solid #6B6B6B;
-		color: #242424;
-	}
-	&:active {
-		animation-duration: 0.5s;
-		animation-iteration-count: 1; /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
-		animation-fill-mode:forwards; 
-	}
-}
-
-.button-primary { 
-	background-color: $yellowColor; 
-	&:hover {
-		background-image: radial-gradient(circle,#FFDF86 10%,transparent 10%); /*создала радиальный градиент с формой "круг" и прозрачностью в 10%*/
-	}
-	&:active { /*pressed на макете*/
-		color: #000000;
-		background-image: radial-gradient(circle,#FFBB0C 10%,transparent 10%); 
-		animation-name: button-primary-active; /*имя анимации*/
-	}
-	&:disabled { /*disabled на макете*/
-	color: #6B6B6B;
-	background-color: #FFE28E;
-	}
-}
-.button-secondary { /*button-white*/
-	border: 2px solid $yellowColor;
-	background-color:#F6F6F6;;
-	&:hover {
-	background-image: radial-gradient(circle,#FFFFFF 10%,transparent 10%); /*создала радиальный градиент с формой "круг" и прозрачностью в 20%*/
-	}
-	&:active {
-	color: #242424;
-	border: 3px solid #FFBC00;
-	background-image: radial-gradient(circle,rgba(255, 196, 30, 0.2) 10%,transparent 10%); /*создала радиальный градиент с формой "круг" и прозрачностью в 20%*/
-	animation-name: button-secondary-active; /*имя анимации*/
-	}
-	&:disabled {
-	color: #6B6B6B;
-	background-color: #F6F6F6;
-	border: 2px solid #B3B3B3;
-	}
-}
-@keyframes button-primary-hover {
-	from {
-		background-size: 0% 0%;
-	}
-	to {
-		background-size: 1000% 1000%;
-	}
-}
-@keyframes button-primary-active {
-	from {
-		background-size: 0% 0%;
-	}
-	to {
-		background-size: 1000% 1000%;
-	}
-	}
-@keyframes button-secondary-hover {
-	from {
-		background-size: 0% 0%;
-	}
-	to {
-		background-size: 1000% 1000%;
-	}
-}
-	
-@keyframes button-secondary-active {
-	from {
-		background-size: 0% 0%;
-	}
-	to {
-		background-size: 1000% 1000%;
-	}
+	align-items: center;
 }
 .header-img {
   fill: $lightColor;
@@ -170,7 +58,7 @@ body {
   width: 200px;
   height: 40px;
   color: $lightColor;
-  font-size: 15px;
+  font-size: 16px;
   background-color: #2d333b;
   background-repeat: no-repeat;
   border: 2px solid $lightColor;
@@ -186,38 +74,32 @@ body {
 }
 .main {
   & .select {
-    margin-left: 5%;
     margin-bottom: 40px;
   }
   & .film-galary__wrapper {
     margin-bottom: 40px;
   }
-  & .pagination {
-    margin-bottom: 40px;
-  }
 }
 .film-galary__wrapper {
-  width: 90%;
+  max-width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
   align-content: flex-start;
   justify-content: center;
-  grid-row-gap: 50px;
-  grid-column-gap: 25px;
+	justify-items: center;
+  grid-row-gap: 30px;
+  grid-column-gap: 50px;
 }
-/**
-  функция repeat() позволяет повторять колонки сколько угодно раз
-  auto-fill ЗАПОЛНЯЕТ строку максимально возможным числом колонок
-  функция minmax() задаen минимальную ширину колонок, чтобы они не стали очень узкими
-*/
 
 .film-item {
   display: grid;
   align-content: flex-end;
   align-items: center;
+	justify-content: center;
+    justify-items: center;
 	// position: relative;
-  width: 200px;
+  // width: 200px;
   & .film-title {
 		margin-bottom: 10px;
   }
@@ -231,6 +113,7 @@ body {
   	transform: translateY(0);
 	}
 }
+
 .film-title {
   font-weight: 700;
   font-size: 20px;
@@ -244,6 +127,7 @@ body {
 .film-item-img {
   overflow: hidden; /*Контет обрезается, без предоставления прокрутки.*/
 	display: block;
+	object-fit: cover;
 	width: 200px;
   height: 300px;
   border-radius: 5px;
@@ -252,6 +136,7 @@ body {
 		box-shadow: 0px 2px 8px $yellowColor; /*макет*/
 	}
 }
+
 .by-hover {
 	color: black;
 	position: absolute;
@@ -265,20 +150,18 @@ body {
   transition: transform 0.3s linear;
 	background-color: $lightColor;
 }
-
-
 /*______________________Пагинация____________________________*/
 .pagination {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+	max-width: 100%;
+  // flex-wrap: wrap;
   & .pagination-item {
     color: $lightColor;
     padding: 8px 16px;
     text-decoration: none;
     border: 1px solid #ddd;
-    margin: 0 4px; /* 0 is for top and bottom. Feel free to change it */
-    margin-bottom: 8px;
+    margin: 0 4px; 
   }
   &  .pagination-item.active {
     background-color: $yellowColor;
@@ -295,12 +178,93 @@ body {
     border-bottom-right-radius: 5px;
   }
 }
+/*----------КНОПОЧКИ---------*/
+.button {
+	display: inline-block;
+	padding: 8px;
+	border-radius: 5px;
+	border: 0; /*сбрасываем контур (для тега button)*/
+	max-width: 175px;
+	// height: 40;
+	overflow: hidden; 
+	text-align: center;
+	font-family: 'Roboto', Arial, sans-serif;
+	font-weight: 500;
+	font-size: 16px;
+	color: $darkColor;
+	// cursor: pointer;
 
-.visibility-hidden {
-  visibility: hidden;
+	&:focus {
+		outline: none;
+	}
 }
-.hidden {
-  display: none;
+.button-login {
+  background-color: transparent;
+  color: $lightColor;
+  border: 2px solid $lightColor;
+	cursor: pointer;
+	&:hover { 
+    border: 1px solid $yellowColor;
+		box-shadow: 0px 2px 8px $yellowColor; /*макет*/
+	}
+}
+
+
+@media screen and (max-width: 768px){
+	.header, .main {
+		max-width: 100%;
+	}
+	.header {
+		height: 70px;
+	}
+	.main {
+		& .select {
+			margin-bottom: 20px;
+		}
+		& .film-galary__wrapper {
+			margin-bottom: 20px;
+		}
+	}
+	.film-galary__wrapper {
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+		grid-row-gap: 25px;
+		grid-column-gap: 25px;
+	}
+	.button {
+		font-size: 16px;
+	}
+	.film-item-img {
+			width: 160px;
+			height: 240px;
+	}
+	.film-title {
+		font-weight: 500;
+		font-size: 16px;
+	}
+	.pagination {
+		& .pagination-item {
+			padding: 6px 12px;
+			margin: 0 3px; 
+		}
+	}
+}
+@media screen and (max-width: 550px){
+	.pagination {
+		& .pagination-item {
+			padding: 4px 6px;
+			margin: 0 2px; 
+			font-weight: 400;
+		}
+	}
+}
+@media screen and (max-width: 360px){
+	.pagination {
+		& .pagination-item {
+			padding: 2px 4px;
+			margin: 0 1px; 
+			font-size: 14px;
+		}
+	}
 }
 
 
@@ -309,43 +273,3 @@ body {
 
 
 
-
-// @media screen and (max-width: 767px) {
-// 	.form { /*ОДИНАКОВАЯ ДЛЯ ВСЕХ*/
-// 		padding-top: 20px; /* Location of the box */
-// 	}
-// 	.form__container { /*ОДИНАКОВАЯ ДЛЯ ВСЕХ*/
-// 		max-width: 640px; 
-// 		padding: 30px 170px;
-// 	}
-// 	.form__title { /*ОДИНАКОВАЯ ДЛЯ ВСЕХ*/
-// 		font-size: 22px;
-// 	}
-// 	.form__button-type { /*ОДИНАКОВАЯ ДЛЯ ВСЕХ*/
-// 		flex-direction: column;
-// 		align-items: center;
-// 		& .button-primary {
-// 			margin-bottom: 20px;
-// 		}
-// 	}
-// 	.button { /*+++*/
-// 		font-size: 18px;
-// 		padding: 5px 18px 5px 18px;
-// 		display: block;
-// 	}
-// 	.registration-content {  /*!*/
-// 		max-width: 640px; 
-// 		max-height: 728px;
-// 	}
-// }
-
-// @media screen and (max-width: 639px) {
-// 	.form__container { /*ОДИНАКОВАЯ ДЛЯ ВСЕХ*/
-// 		max-width: 360px; 
-// 		padding: 30px;
-// 	}
-// 	.registration-content {  /*!*/
-// 		max-width: 360px; 
-// 		max-height: 728px;
-// 	}
-// }

@@ -19,7 +19,7 @@
 
 	<main class="main">
 		<form id="registration-form" method="POST">
-			<div class="registration-content form__container">
+			<div class="form__container">
 				<h2 class="form__title">Registration</h2>
 				<hr size="1" color="#EEBF3A">
 				<div class="form__text-block">
@@ -43,7 +43,6 @@
 					data-rule="psw-repeat" data-from = "6" required>
 					<span class="confirmMessage"></span>
 	
-					<!-- <span class="confirmMessage"></span> -->
 					<label for="email">Email</label>
 					<input type="text" name="email" id="signup-email" placeholder="Email" 
 					data-rule="email" required>
@@ -51,8 +50,8 @@
 	
 				</div>
 				<div class="form__button-type">
-					<button class="button button-primary form__button-primary" id="signup-submit" type="button">Sign Up</button>
-					<button class="button button-secondary" id="signup-clear" type="reset">Clear</button>
+					<button class="button button-disabled" id="signup-submit" type="submit" disabled>Sign Up</button>
+					<button class="button button-primary" id="signup-clear" type="reset">Clear</button>
 				</div>
 			</div>
 		</form>

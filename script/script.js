@@ -149,7 +149,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			card.classList.add('film-item');
 			card.innerHTML = `
 				<h2 class='film-title flex-center'>${element.title}</h2>  
-				<a class='film-item-link' id=${elementId} href='${filmInfoURI}?id=${elementId}' target='_blank'>
+				<a class='film-item-link' id=${elementId} href='${filmInfoURI}?id=${elementId}'>
           <img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
 					<div class='by-hover'>
 					<p>Рейтинг: ${element.vote_average}</p>

@@ -1,7 +1,8 @@
 @import "globalStyle.scss";
 
 .form__container { 
-	padding: 40px 25px;
+	max-width: 525px; 
+	padding: 20px;
 	box-shadow: 0px 0px 22px white;
 	border-radius: 5px;
 	background: white;
@@ -47,7 +48,7 @@ input {
 	}
 	&:focus { 
 		outline:none;
-		border: 4px auto #FFC41E;
+		border: 2px auto #FFC41E;
 		box-shadow: 0 0 0 2px rgb(255,196,30,0.25);
 		color: #000000;
 	}
@@ -63,32 +64,86 @@ label {
 	color: #474747;
 	opacity: 0.7;
 }
+.form__button-type { 
+	& .button:first-child {
+		margin-right: 10px;
+	}
+}
 
+.form__button-type { /*+++*/
+	display: flex;
+	justify-content: space-between;
+}
+.button-primary,
+.button-disabled {
+	width: 180px;
+}
+
+.button-primary { 
+	background-color: $yellowColor; 
+	cursor: pointer;
+	background-position: 50% 50%; /*в центрe начинаем анимацию*/
+	&:hover {
+		color: #000000;
+		box-shadow: 0px 2px 4px $darkColor;
+		animation-name: button-primary-hover; /*имя анимации*/
+		animation-duration: 0.5s;
+		animation-iteration-count: 1; /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
+		animation-fill-mode:forwards; 
+		background-image: radial-gradient(circle,#FFDF86 10%,transparent 10%); /*создала радиальный градиент с формой "круг" и прозрачностью в 10%*/
+	}
+	&:active { /*pressed на макете*/
+		color: #000000;
+		background-image: radial-gradient(circle,#FFBB0C 10%,transparent 10%); 
+		animation-name: button-primary-active; /*имя анимации*/
+	}
+	&:disabled { /*disabled на макете*/
+	color: #6B6B6B;
+	background-color: #FFE28E;
+	}
+	&:focus-visible {
+		border: 3px solid #6B6B6B;
+		color: #242424;
+	}
+	&:active {
+		animation-duration: 0.5s;
+		animation-iteration-count: 1; /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
+		animation-fill-mode:forwards; 
+	}
+}
+.button-disabled { /*button-white*/
+	border: 2px solid $yellowColor;
+	background-color:#F6F6F6;;
+}
+@keyframes button-primary-hover {
+	from {
+		background-size: 0% 0%;
+	}
+	to {
+		background-size: 1000% 1000%;
+	}
+}
+@keyframes button-primary-active {
+	from {
+		background-size: 0% 0%;
+	}
+	to {
+		background-size: 1000% 1000%;
+	}
+	}
 .valid {
-	border: 2px solid green;
+	border: 1px solid green;
 }
 .invalid {
-	border: 2px solid red;
+	border: 1px solid red;
 }
 .confirmMessage {
 	color: red;
 	display: block;
-	font-size: 14px;
+	font-size: 12px;
 }
 
-/*!--------------------------- FORM Auturisation -----------------------*/
-.authorization-form-content {  /*!*/
-	max-width: 525px; 
-	height: 370px; /*ПОДОБРАТЬ*/
-}
-/*!--------------------------- FORM Registration -----------------------*/
-.registration-content {  /*!*/
-	max-width: 525px;
-	height: 570px; /*ПОДОБРАТЬ*/
-}
-
-
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 360px) {
 	.form__title {
 		font-size: 22px;
 	}

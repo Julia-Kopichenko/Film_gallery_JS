@@ -45,6 +45,19 @@ html {
   box-sizing: border-box;
 }
 
+a {
+  background: transparent;
+  text-decoration: none;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
 body {
   font-family: "Roboto", Arial, sans-serif;
   font-size: 16px;
@@ -52,6 +65,7 @@ body {
   line-height: 19px;
   color: #adbac7;
   max-width: 1440px;
+  padding: 20px;
   margin: 0 auto;
   background-color: #2d333b;
 }
@@ -60,7 +74,7 @@ body header {
 }
 
 .header, .main {
-  max-width: 80vw;
+  max-width: 90%;
   margin: 0 auto;
 }
 
@@ -71,147 +85,6 @@ body header {
   align-items: center;
 }
 
-/*----------КНОПОЧКИ---------*/
-.button {
-  display: inline-block;
-  padding: 6px 25px;
-  border-radius: 5px;
-  border: 0;
-  /*сбрасываем контур (для тега button)*/
-  overflow: hidden;
-  text-align: center;
-  font-family: "Roboto", Arial, sans-serif;
-  font-weight: 500;
-  font-size: 20px;
-  color: #2d333b;
-  cursor: pointer;
-}
-.button:hover {
-  border: 1px solid #FBC832;
-  box-shadow: 0px 2px 8px #FBC832;
-  /*макет*/
-  animation-name: button-secondary-hover;
-  /*имя анимации*/
-  animation-duration: 0.5s;
-  animation-iteration-count: 1;
-  /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
-  animation-fill-mode: forwards;
-}
-.button:focus {
-  outline: none;
-}
-
-.button-login {
-  background-color: transparent;
-  color: #adbac7;
-  border: 2px solid #adbac7;
-}
-
-.form__button-type {
-  /*+++*/
-  display: flex;
-  justify-content: space-between;
-}
-
-.button-primary,
-.button-secondary {
-  width: 180px;
-  background-position: 50% 50%;
-  /*в центрe начинаем анимацию*/
-}
-.button-primary:hover,
-.button-secondary:hover {
-  color: #000000;
-  box-shadow: 0px 2px 4px #2d333b;
-}
-.button-primary:focus-visible,
-.button-secondary:focus-visible {
-  border: 3px solid #6B6B6B;
-  color: #242424;
-}
-.button-primary:active,
-.button-secondary:active {
-  animation-duration: 0.5s;
-  animation-iteration-count: 1;
-  /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
-  animation-fill-mode: forwards;
-}
-
-.button-primary {
-  background-color: #FBC832;
-}
-.button-primary:hover {
-  background-image: radial-gradient(circle, #FFDF86 10%, transparent 10%);
-  /*создала радиальный градиент с формой "круг" и прозрачностью в 10%*/
-}
-.button-primary:active {
-  /*pressed на макете*/
-  color: #000000;
-  background-image: radial-gradient(circle, #FFBB0C 10%, transparent 10%);
-  animation-name: button-primary-active;
-  /*имя анимации*/
-}
-.button-primary:disabled {
-  /*disabled на макете*/
-  color: #6B6B6B;
-  background-color: #FFE28E;
-}
-
-.button-secondary {
-  /*button-white*/
-  border: 2px solid #FBC832;
-  background-color: #F6F6F6;
-}
-.button-secondary:hover {
-  background-image: radial-gradient(circle, #FFFFFF 10%, transparent 10%);
-  /*создала радиальный градиент с формой "круг" и прозрачностью в 20%*/
-}
-.button-secondary:active {
-  color: #242424;
-  border: 3px solid #FFBC00;
-  background-image: radial-gradient(circle, rgba(255, 196, 30, 0.2) 10%, transparent 10%);
-  /*создала радиальный градиент с формой "круг" и прозрачностью в 20%*/
-  animation-name: button-secondary-active;
-  /*имя анимации*/
-}
-.button-secondary:disabled {
-  color: #6B6B6B;
-  background-color: #F6F6F6;
-  border: 2px solid #B3B3B3;
-}
-
-@keyframes button-primary-hover {
-  from {
-    background-size: 0% 0%;
-  }
-  to {
-    background-size: 1000% 1000%;
-  }
-}
-@keyframes button-primary-active {
-  from {
-    background-size: 0% 0%;
-  }
-  to {
-    background-size: 1000% 1000%;
-  }
-}
-@keyframes button-secondary-hover {
-  from {
-    background-size: 0% 0%;
-  }
-  to {
-    background-size: 1000% 1000%;
-  }
-}
-@keyframes button-secondary-active {
-  from {
-    background-size: 0% 0%;
-  }
-  to {
-    background-size: 1000% 1000%;
-  }
-}
 .header-img {
   fill: #adbac7;
 }
@@ -223,7 +96,7 @@ body header {
   width: 200px;
   height: 40px;
   color: #adbac7;
-  font-size: 15px;
+  font-size: 16px;
   background-color: #2d333b;
   background-repeat: no-repeat;
   border: 2px solid #adbac7;
@@ -240,37 +113,30 @@ body header {
 }
 
 .main .select {
-  margin-left: 5%;
   margin-bottom: 40px;
 }
 .main .film-galary__wrapper {
   margin-bottom: 40px;
 }
-.main .pagination {
-  margin-bottom: 40px;
-}
 
 .film-galary__wrapper {
-  width: 90%;
+  max-width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   align-content: flex-start;
   justify-content: center;
-  grid-row-gap: 50px;
-  grid-column-gap: 25px;
+  justify-items: center;
+  grid-row-gap: 30px;
+  grid-column-gap: 50px;
 }
 
-/**
-  функция repeat() позволяет повторять колонки сколько угодно раз
-  auto-fill ЗАПОЛНЯЕТ строку максимально возможным числом колонок
-  функция minmax() задаen минимальную ширину колонок, чтобы они не стали очень узкими
-*/
 .film-item {
   display: grid;
   align-content: flex-end;
   align-items: center;
-  width: 200px;
+  justify-content: center;
+  justify-items: center;
 }
 .film-item .film-title {
   margin-bottom: 10px;
@@ -303,6 +169,7 @@ body header {
   overflow: hidden;
   /*Контет обрезается, без предоставления прокрутки.*/
   display: block;
+  object-fit: cover;
   width: 200px;
   height: 300px;
   border-radius: 5px;
@@ -332,7 +199,7 @@ body header {
 .pagination {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
+  max-width: 100%;
 }
 .pagination .pagination-item {
   color: #adbac7;
@@ -340,8 +207,6 @@ body header {
   text-decoration: none;
   border: 1px solid #ddd;
   margin: 0 4px;
-  /* 0 is for top and bottom. Feel free to change it */
-  margin-bottom: 8px;
 }
 .pagination .pagination-item.active {
   background-color: #FBC832;
@@ -360,16 +225,95 @@ body header {
   border-bottom-right-radius: 5px;
 }
 
-.visibility-hidden {
-  visibility: hidden;
+/*----------КНОПОЧКИ---------*/
+.button {
+  display: inline-block;
+  padding: 8px;
+  border-radius: 5px;
+  border: 0;
+  /*сбрасываем контур (для тега button)*/
+  max-width: 175px;
+  overflow: hidden;
+  text-align: center;
+  font-family: "Roboto", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #2d333b;
+}
+.button:focus {
+  outline: none;
 }
 
-.hidden {
-  display: none;
+.button-login {
+  background-color: transparent;
+  color: #adbac7;
+  border: 2px solid #adbac7;
+  cursor: pointer;
+}
+.button-login:hover {
+  border: 1px solid #FBC832;
+  box-shadow: 0px 2px 8px #FBC832;
+  /*макет*/
 }
 
+@media screen and (max-width: 768px) {
+  .header, .main {
+    max-width: 100%;
+  }
+
+  .header {
+    height: 70px;
+  }
+
+  .main .select {
+    margin-bottom: 20px;
+  }
+  .main .film-galary__wrapper {
+    margin-bottom: 20px;
+  }
+
+  .film-galary__wrapper {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-row-gap: 25px;
+    grid-column-gap: 25px;
+  }
+
+  .button {
+    font-size: 16px;
+  }
+
+  .film-item-img {
+    width: 160px;
+    height: 240px;
+  }
+
+  .film-title {
+    font-weight: 500;
+    font-size: 16px;
+  }
+
+  .pagination .pagination-item {
+    padding: 6px 12px;
+    margin: 0 3px;
+  }
+}
+@media screen and (max-width: 550px) {
+  .pagination .pagination-item {
+    padding: 4px 6px;
+    margin: 0 2px;
+    font-weight: 400;
+  }
+}
+@media screen and (max-width: 360px) {
+  .pagination .pagination-item {
+    padding: 2px 4px;
+    margin: 0 1px;
+    font-size: 14px;
+  }
+}
 .form__container {
-  padding: 40px 25px;
+  max-width: 525px;
+  padding: 20px;
   box-shadow: 0px 0px 22px white;
   border-radius: 5px;
   background: white;
@@ -418,7 +362,7 @@ input:hover {
 }
 input:focus {
   outline: none;
-  border: 4px auto #FFC41E;
+  border: 2px auto #FFC41E;
   box-shadow: 0 0 0 2px rgba(255, 196, 30, 0.25);
   color: #000000;
 }
@@ -435,37 +379,99 @@ label {
   opacity: 0.7;
 }
 
+.form__button-type .button:first-child {
+  margin-right: 10px;
+}
+
+.form__button-type {
+  /*+++*/
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-primary,
+.button-disabled {
+  width: 180px;
+}
+
+.button-primary {
+  background-color: #FBC832;
+  cursor: pointer;
+  background-position: 50% 50%;
+  /*в центрe начинаем анимацию*/
+}
+.button-primary:hover {
+  color: #000000;
+  box-shadow: 0px 2px 4px #2d333b;
+  animation-name: button-primary-hover;
+  /*имя анимации*/
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
+  animation-fill-mode: forwards;
+  background-image: radial-gradient(circle, #FFDF86 10%, transparent 10%);
+  /*создала радиальный градиент с формой "круг" и прозрачностью в 10%*/
+}
+.button-primary:active {
+  /*pressed на макете*/
+  color: #000000;
+  background-image: radial-gradient(circle, #FFBB0C 10%, transparent 10%);
+  animation-name: button-primary-active;
+  /*имя анимации*/
+}
+.button-primary:disabled {
+  /*disabled на макете*/
+  color: #6B6B6B;
+  background-color: #FFE28E;
+}
+.button-primary:focus-visible {
+  border: 3px solid #6B6B6B;
+  color: #242424;
+}
+.button-primary:active {
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
+  animation-fill-mode: forwards;
+}
+
+.button-disabled {
+  /*button-white*/
+  border: 2px solid #FBC832;
+  background-color: #F6F6F6;
+}
+
+@keyframes button-primary-hover {
+  from {
+    background-size: 0% 0%;
+  }
+  to {
+    background-size: 1000% 1000%;
+  }
+}
+@keyframes button-primary-active {
+  from {
+    background-size: 0% 0%;
+  }
+  to {
+    background-size: 1000% 1000%;
+  }
+}
 .valid {
-  border: 2px solid green;
+  border: 1px solid green;
 }
 
 .invalid {
-  border: 2px solid red;
+  border: 1px solid red;
 }
 
 .confirmMessage {
   color: red;
   display: block;
-  font-size: 14px;
+  font-size: 12px;
 }
 
-/*!--------------------------- FORM Auturisation -----------------------*/
-.authorization-form-content {
-  /*!*/
-  max-width: 525px;
-  height: 370px;
-  /*ПОДОБРАТЬ*/
-}
-
-/*!--------------------------- FORM Registration -----------------------*/
-.registration-content {
-  /*!*/
-  max-width: 525px;
-  height: 570px;
-  /*ПОДОБРАТЬ*/
-}
-
-@media screen and (max-width: 570px) {
+@media screen and (max-width: 360px) {
   .form__title {
     font-size: 22px;
   }

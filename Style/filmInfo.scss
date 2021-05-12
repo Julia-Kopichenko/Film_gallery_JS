@@ -1,15 +1,17 @@
 @import "globalStyle.scss";
 
 .film-info-wrapper {
-  width: 60%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
-  padding: 30px;
-  padding-top: 100px;
+  // padding: 30px;
+  padding-top: 20px;
+  
   & .film-item-wrapper {
     margin-right: 20px;
+    margin-bottom: 20px;
   }
   & .film-title {
     font-size: 28px;
@@ -21,7 +23,6 @@
     font-weight: 500;
     margin-bottom: 15px;
 		line-height: 22px;
-
     & span {
       font-size: 19px;
       font-weight: 900;
@@ -31,4 +32,26 @@
 }
 .film-item-text {
   width: 60%;
+}
+@media screen and (max-width: 768px) {
+  .film-info-wrapper {
+    & .film-title {
+      font-size: 20px;
+      line-height: 20px;
+      margin-bottom: 20px;
+    }
+    & p {
+      font-weight: 400;
+      margin-bottom: 10px;
+      line-height: 20px;
+      & span {
+        font-size: 19px;
+        font-weight: 500;
+        color: rgba(188, 156, 248, 0.747);
+      }
+    }
+  }
+  .film-item-text {
+    width: 100%;
+  }
 }
