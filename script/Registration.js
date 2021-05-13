@@ -69,6 +69,8 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 
 	let usersAll = [];
+	let authorizedUser;
+
 	
 	usersAll = JSON.parse(localStorage.getItem('users'));
 	
@@ -101,9 +103,14 @@ window.addEventListener('DOMContentLoaded', function () {
 			'email': email,
 			'isAdmin': false
 		}
-
 		usersAll.push(user);
 		updateUsersLocalStorage();
+
+		// заполним сразу объект авторизованного юзера
+		authorizedUser = {};
+		authorizedUser.name = user.name;
+		authorizedUser.isAdmin = user.isAdmin;
+		localStorage.setItem('authorizedUser', JSON.stringify(authorizedUser));
 
 		clearForm();
 		location.href='/index.html';

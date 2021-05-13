@@ -69,7 +69,6 @@ label {
 		margin-right: 10px;
 	}
 }
-
 .form__button-type { /*+++*/
 	display: flex;
 	justify-content: space-between;
@@ -142,6 +141,14 @@ label {
 	display: block;
 	font-size: 12px;
 }
+a.disabled {
+	pointer-events: none; /* делаем элемент неактивным для взаимодействия */
+	cursor: default; /*  курсор в виде стрелки */
+	color: #888;/* цвет текста серый */
+}
+
+
+
 
 @media screen and (max-width: 360px) {
 	.form__title {

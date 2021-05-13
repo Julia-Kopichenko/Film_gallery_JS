@@ -27,9 +27,13 @@
       font-size: 19px;
       font-weight: 900;
       color: rgba(188, 156, 248, 0.747);
+			&.vote-count {
+				color: red;
+			}
     }
   }
 }
+
 .film-item-text {
   width: 60%;
 }

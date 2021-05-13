@@ -2,9 +2,12 @@ window.addEventListener('DOMContentLoaded', function () {
 	const signinSubmitBtn = document.querySelector('#signin-submit');
 	let inputs = document.querySelectorAll('input[data-rule]');
 	let usersAll = [];
+	let authorizedUser;
 	
 	usersAll = JSON.parse(localStorage.getItem('users'));
 
+
+	//-----------------
 	//! вАЛИДАЦИЯ 
 	for (let input of inputs) {
 		// input.addEventListener('blur', function () {
@@ -36,6 +39,10 @@ window.addEventListener('DOMContentLoaded', function () {
 							if (emailInputValue === usersAll[i].email && value === usersAll[i].password) {
 								check = true;
 								message.innerHTML = '';
+
+								authorizedUser = {};
+								authorizedUser.name = usersAll[i].name;
+								authorizedUser.isAdmin = usersAll[i].isAdmin;
 								break;
 							} else {
 								check = false;
@@ -48,10 +55,10 @@ window.addEventListener('DOMContentLoaded', function () {
 					this.classList.remove('invalid');
 					this.classList.add('valid');
 					if (allInputsAreValid()) {
-						//снять аттрибут и класс disabled
 						signinSubmitBtn.classList.remove('button-disabled');
 						signinSubmitBtn.classList.add('button-primary');
-						signinSubmitBtn.removeAttribute('disabled');
+						// signinSubmitBtn.removeAttribute('disabled');
+						signinSubmitBtn.classList.remove('disabled')
 					}
 				} else {
 					this.classList.remove('valid');
@@ -74,11 +81,14 @@ window.addEventListener('DOMContentLoaded', function () {
 		return isValid;
 	}
 	//! при нажатии на кнопку SIGN IN (не сработала)
-	// signinSubmitBtn.addEventListener('click', function () {
-	// 	// location.replace('/index.html');
-	// 	console.log('Вот, работает');
-	// 	document.location.href = "/index.html";
-	// });
+	signinSubmitBtn.addEventListener('click', function () {
+		if (authorizedUser) {
+			localStorage.setItem('authorizedUser', JSON.stringify(authorizedUser));
+		}
+		// // location.replace('/index.html');
+		// console.log('Вот, работает');
+		// document.location.href = "index.html";
+	});
 
 
 });

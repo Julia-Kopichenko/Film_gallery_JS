@@ -92,6 +92,19 @@ body header {
   transform: scale(1.1);
 }
 
+.header-user-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.header-user-info .user-name {
+  margin-right: 20px;
+}
+
+.user-name {
+  font-size: 19px;
+}
+
 .select {
   width: 200px;
   height: 40px;
@@ -227,7 +240,6 @@ body header {
 
 /*----------КНОПОЧКИ---------*/
 .button {
-  display: inline-block;
   padding: 8px;
   border-radius: 5px;
   border: 0;
@@ -244,13 +256,16 @@ body header {
   outline: none;
 }
 
-.button-login {
+.button-login,
+.button-logout {
+  width: 165px;
   background-color: transparent;
   color: #adbac7;
   border: 2px solid #adbac7;
   cursor: pointer;
 }
-.button-login:hover {
+.button-login:hover,
+.button-logout:hover {
   border: 1px solid #FBC832;
   box-shadow: 0px 2px 8px #FBC832;
   /*макет*/
@@ -338,6 +353,9 @@ body header {
   font-size: 19px;
   font-weight: 900;
   color: rgba(188, 156, 248, 0.747);
+}
+.film-info-wrapper p span.vote-count {
+  color: red;
 }
 
 .film-item-text {

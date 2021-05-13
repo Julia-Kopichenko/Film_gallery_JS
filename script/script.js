@@ -34,6 +34,34 @@ window.addEventListener('DOMContentLoaded', function () {
 	const paginationSet2End = 10;
 	const paginationSet3Start = 11; // номер первой страницы третьего блока из 5ти страниц
 	const paginationSet3End = 15;
+	const buttonLogin = document.querySelector('.button-login');
+	const buttonLogout = document.querySelector('.button-logout');
+	const blockUserInfo = document.querySelector('.header-user-info-wrapper');
+	const userName = document.querySelector('.user-name');
+
+//! получим данные о юзере
+	let authorizedUser;
+	let nameAuthorizedUser;
+	let isAdminAuthorizedUser;
+	if (localStorage.getItem('authorizedUser')) {
+		authorizedUser = JSON.parse(localStorage.getItem('authorizedUser'));
+		nameAuthorizedUser = authorizedUser.name;
+		isAdminAuthorizedUser = authorizedUser.isAdmin;
+	}
+
+	//! изменим страницу для зарегистрированного пользователя
+	if (authorizedUser) {
+		buttonLogin.classList.add('hidden');
+		blockUserInfo.classList.remove('hidden');
+		userName.innerHTML = nameAuthorizedUser;
+	}
+
+	//! при клике на кнопку log out
+	buttonLogout.addEventListener('click', function () {
+		blockUserInfo.classList.add('hidden');
+		buttonLogin.classList.remove('hidden');
+		localStorage.removeItem('authorizedUser');
+	})
 
 	//! Функция получений данных по запросу. Нам возвращается промис. 
 	// ключевое слово async перед функцией гарантирует, что эта функция в любом случае вернёт промис
@@ -338,9 +366,9 @@ window.addEventListener('DOMContentLoaded', function () {
 			localStorage.setItem('users', users);
 		}
 		
-		function updateUsersLocalStorage() {
-			localStorage.setItem('users', JSON.stringify(usersAll));
-		}
+		// function updateUsersLocalStorage() {
+		// 	localStorage.setItem('users', JSON.stringify(usersAll));
+		// }
 
 
 
