@@ -1,6 +1,7 @@
 window.addEventListener('DOMContentLoaded', function () {
 	const signinSubmitBtn = document.querySelector('#signin-submit');
 	let inputs = document.querySelectorAll('input[data-rule]');
+	
 	let usersAll = [];
 	let authorizedUser;
 	
@@ -19,6 +20,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			// message = this.value;
 			let message = this.nextElementSibling;
 			let check;
+			
 			if (value.length > 0) {
 				switch (rule) {
 					case 'isExistingUser':

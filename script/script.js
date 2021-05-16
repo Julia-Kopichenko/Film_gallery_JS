@@ -38,13 +38,12 @@ window.addEventListener('DOMContentLoaded', function () {
 	const buttonLogout = document.querySelector('.button-logout');
 	const userName = document.querySelector('.user-name');
 
-	//! Добавим админа и еще одного пользователя из файла JSON
-	let usersAll = [];
+	let removeFilmsArr = [];
 
-	if (localStorage.getItem('users')) {
-			usersAll = JSON.parse(localStorage.getItem('users'));
-		} else {
-			localStorage.setItem('users', users);
+	//! Добавим админа и еще одного пользователя из файла JSON
+
+	if (!localStorage.getItem('users')) {
+		localStorage.setItem('users', users);
 	}
 
 //! получим данные о юзере
@@ -73,7 +72,6 @@ window.addEventListener('DOMContentLoaded', function () {
 	})
 
 	//! Функция получений данных по запросу. Нам возвращается промис. 
-	// ключевое слово async перед функцией гарантирует, что эта функция в любом случае вернёт промис
 	async function getResponseByPage(pageNumber, sortBy) {
 		let urlFilms = `${url}&sort_by=${sortBy}&page=${pageNumber}&vote_count.gte=10`;
 		const result = await fetch(urlFilms)
@@ -118,25 +116,39 @@ window.addEventListener('DOMContentLoaded', function () {
 
 		galary.innerHTML = ''; 
 		response.forEach(element => {
+			// проверка по id на то, удаленный фильм или нет
 			let card = document.createElement('li');
 			let elementId = element.id;
-			card.classList.add('film-item');
-			card.innerHTML = `
-				<h2 class='film-title flex-center'>${element.title}</h2>  
-				<div class = 'film-item-wrapper'>
-				<a class='film-item-link' id=${elementId} href='${filmInfoURI}?id=${elementId}'>
-          <img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
-					<div class='by-hover'>
-					<p>Рейтинг: ${element.vote_average}</p>
-					<p>Дата релиза: ${element.release_date}</p>
+			let removedArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
+			let isRemoved = false;
+			if (removedArr) {
+				for (let i = 0; i < removedArr.length; i++) {
+					if (elementId == removedArr[i].id) {
+						isRemoved = true;
+						break;
+					}
+				}
+			}
+			if (!isRemoved) {
+				card.classList.add('film-item');
+				card.setAttribute('id', `${elementId}`);
+				card.innerHTML = `
+					<h2 class='film-title flex-center'>${element.title}</h2>  
+					<div class = 'film-item-wrapper'>
+					<a class='film-item-link' href='${filmInfoURI}?id=${elementId}'>
+						<img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
+						<div class='by-hover'>
+						<p>Рейтинг: ${element.vote_average}</p>
+						<p>Дата релиза: ${element.release_date}</p>
+						</div>
+					</a>
+					<button class="button-remove-film button" aria-label="remove film" title="remove film">
+					<svg viewBox="0 0 74 74" width="30px" xmlns="http://www.w3.org/2000/svg"><path d="m52.175 72h-30.35a3.288 3.288 0 0 1 -3.293-3.018l-4.427-50.913 1.995-.169 4.427 50.912a1.3 1.3 0 0 0 1.298 1.188h30.35a1.3 1.3 0 0 0 1.3-1.193l4.425-50.907 1.992.173-4.424 50.908a3.288 3.288 0 0 1 -3.293 3.019z"/><path d="m62.355 18.983h-50.71a1 1 0 0 1 -1-1v-3.458a5.616 5.616 0 0 1 5.609-5.61h41.492a5.616 5.616 0 0 1 5.609 5.61v3.458a1 1 0 0 1 -1 1zm-49.711-2h48.711v-2.458a3.614 3.614 0 0 0 -3.609-3.61h-41.492a3.614 3.614 0 0 0 -3.609 3.61z"/><path d="m46.221 10.915h-18.442a1 1 0 0 1 -1-1v-2.305a5.616 5.616 0 0 1 5.611-5.61h9.22a5.616 5.616 0 0 1 5.61 5.61v2.3a1 1 0 0 1 -.999 1.005zm-17.441-2h16.441v-1.305a3.614 3.614 0 0 0 -3.611-3.61h-9.22a3.614 3.614 0 0 0 -3.61 3.61z"/><path d="m28.609 43.492h37.528v2h-37.528z" transform="matrix(.062 -.998 .998 .062 .051 89.037)"/><path d="m36 25.763h2v37.458h-2z"/><path d="m25.627 25.727h2v37.528h-2z" transform="matrix(.998 -.061 .061 .998 -2.682 1.719)"/></svg>
+					</button>
 					</div>
-				</a>
-				<button class="button-remove-film button" aria-label="remove film" title="remove film">
-        <svg viewBox="0 0 74 74" width="30px" xmlns="http://www.w3.org/2000/svg"><path d="m52.175 72h-30.35a3.288 3.288 0 0 1 -3.293-3.018l-4.427-50.913 1.995-.169 4.427 50.912a1.3 1.3 0 0 0 1.298 1.188h30.35a1.3 1.3 0 0 0 1.3-1.193l4.425-50.907 1.992.173-4.424 50.908a3.288 3.288 0 0 1 -3.293 3.019z"/><path d="m62.355 18.983h-50.71a1 1 0 0 1 -1-1v-3.458a5.616 5.616 0 0 1 5.609-5.61h41.492a5.616 5.616 0 0 1 5.609 5.61v3.458a1 1 0 0 1 -1 1zm-49.711-2h48.711v-2.458a3.614 3.614 0 0 0 -3.609-3.61h-41.492a3.614 3.614 0 0 0 -3.609 3.61z"/><path d="m46.221 10.915h-18.442a1 1 0 0 1 -1-1v-2.305a5.616 5.616 0 0 1 5.611-5.61h9.22a5.616 5.616 0 0 1 5.61 5.61v2.3a1 1 0 0 1 -.999 1.005zm-17.441-2h16.441v-1.305a3.614 3.614 0 0 0 -3.611-3.61h-9.22a3.614 3.614 0 0 0 -3.61 3.61z"/><path d="m28.609 43.492h37.528v2h-37.528z" transform="matrix(.062 -.998 .998 .062 .051 89.037)"/><path d="m36 25.763h2v37.458h-2z"/><path d="m25.627 25.727h2v37.528h-2z" transform="matrix(.998 -.061 .061 .998 -2.682 1.719)"/></svg>
-      	</button>
-				</div>
-				`;
-			galary.appendChild(card);
+					`;
+				galary.appendChild(card);
+			}
 		});
 		addClickListenerOnGarbage();
 	}
@@ -176,7 +188,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	createPaginationItems(paginationSet1Start, paginationSet1End);
 	//! Функция перерисовки кнопок пагинации
 	function updatePaginationItems(start, end, isForward) {
-		 // isForward - булевая переменная = true идем в прямом поряке, false - в обратном
+	// isForward - булевая переменная = true идем в прямом поряке, false - в обратном
 		let delta;
 		let prevPagesElement	= pagination.querySelector(`#${prevPagesId}`);
 		let nextPagesElement	= pagination.querySelector(`#${nextPagesId}`);
@@ -203,7 +215,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 	
 	//! Событие клик по кнопке "Дом"
-	homeLink.addEventListener('click',function() {
+	homeLink.addEventListener('click', function () {
 		removeActiveClass(paginationItems); // вызов функции удалить стиль 'active' со всех айтемов
 		sortBy = 'popularity.desc';
 		feelBufer(pageNumbersArr,buferArr);
@@ -371,6 +383,15 @@ window.addEventListener('DOMContentLoaded', function () {
 	// !------------------------------------------ФИЛЬТРАЦИЯ END-----------------------------------------
 
 	//! клик по кнопке удалить фильм
+
+	if (localStorage.getItem('removeFilmsArr')) {
+		removeFilmsArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
+	}
+
+	function updateRemoveFilmsArrLocalStorage() {
+		localStorage.setItem('removeFilmsArr', JSON.stringify(removeFilmsArr));
+	}
+
 	function addClickListenerOnGarbage() {
 		document.querySelectorAll('.button-remove-film').forEach(element => {
 	
@@ -380,15 +401,23 @@ window.addEventListener('DOMContentLoaded', function () {
 				if (!eventTarget.classList.contains('button-remove-film')) {
 					eventTarget = eventTarget.parentElement;
 				}
+
 				let elt = eventTarget.closest('.film-item');
+
 				elt.style.display = 'none';
+
+				let idFilm = elt.getAttribute('id');
+				let removeFilmId = {
+					'id': idFilm,
+				}
+
+				removeFilmsArr.push(removeFilmId);
+				updateRemoveFilmsArrLocalStorage();
 			});
-	
-	
 		});
 	}
 	
-
+	
 
 
 });

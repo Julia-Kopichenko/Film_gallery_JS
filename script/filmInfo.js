@@ -1,15 +1,13 @@
 window.addEventListener('DOMContentLoaded', function () {
-	const apiKey = '43042c8dc5edb5f45ccc79e88d4730b0';
 	const filmInfo = document.querySelector('.film-block');
 	let element;
 	let elementId = new URLSearchParams(window.location.search).get('id');
 	let filmsJson = JSON.parse(localStorage.getItem('filmsInfo'));
 	let genresJson = JSON.parse(localStorage.getItem('genres'));
 	//! для кнопок регситрации (копипаст,но пока так)
-	const buttonLogin = document.querySelector('.button-login');
 	const buttonLogout = document.querySelector('.button-logout');
-	const blockUserInfo = document.querySelector('.header-user-info-wrapper');
 	const userName = document.querySelector('.user-name');
+	let removeFilmsArr = [];
 	
 	//! получим данные о юзере
 	let authorizedUser;
@@ -90,7 +88,6 @@ window.addEventListener('DOMContentLoaded', function () {
 		</form>
 	</div>
 	`;
-	addClickListenerOnGarbage();
 	
 	//! изменим страницу для зарегистрированного пользователя
 	const body = document.querySelector('body');
@@ -102,6 +99,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		userName.innerHTML = nameAuthorizedUser;
 		if (isAdminAuthorizedUser){
 			body.classList.add('admin');
+			addClickListenerOnGarbage();
 		}
 	}
 	//! при клике на кнопку log out
@@ -112,31 +110,43 @@ window.addEventListener('DOMContentLoaded', function () {
 		localStorage.removeItem('authorizedUser');
 	})
 	
-	
 	let voteCount = document.querySelector('.vote-count');
 	let voteCountValue = +document.querySelector('.vote-count').textContent;
-	console.log(typeof(voteCountValue));
 	
 	//! Меняем рейтинг и кол-во голосов
-		select.addEventListener('change', function(event) {
+		select.addEventListener('change', function() {
 			voteCountValue++;
-			console.log(voteCountValue);
 			voteCount.innerHTML = voteCountValue;
 		});
 	
 		//! при клике на корзину
-		function addClickListenerOnGarbage() {
-			let buttonRemove = document.querySelector('.button-remove-film');
-			buttonRemove.addEventListener('click', function (event) {
-					let eventTarget = event.target;
-	
-					if (!eventTarget.classList.contains('button-remove-film')) {
-						eventTarget = eventTarget.parentElement;
-					}
-					let elt = eventTarget.closest('.film-block');
-					elt.style.display = 'none';
-			});
+		if (localStorage.getItem('removeFilmsArr')) {
+			removeFilmsArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
 		}
+	
+		function updateRemoveFilmsArrLocalStorage() {
+			localStorage.setItem('removeFilmsArr', JSON.stringify(removeFilmsArr));
+		}
+	
+	function addClickListenerOnGarbage() {
+		let buttonRemove = document.querySelector('.button-remove-film');
+		buttonRemove.addEventListener('click', function (event) {
+				let eventTarget = event.target;
+
+				if (!eventTarget.classList.contains('button-remove-film')) {
+					eventTarget = eventTarget.parentElement;
+			}
+
+			let removeFilmId = {
+				'id': elementId,
+			}
+
+			removeFilmsArr.push(removeFilmId);
+			updateRemoveFilmsArrLocalStorage();
+			// переадресуем на главную страницу
+			location.href = "/index.html";
+		});
+	}
 
 })
 

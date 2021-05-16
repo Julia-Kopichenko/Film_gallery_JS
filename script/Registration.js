@@ -70,7 +70,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
 	let usersAll = [];
 	let authorizedUser;
-
 	
 	usersAll = JSON.parse(localStorage.getItem('users'));
 	
