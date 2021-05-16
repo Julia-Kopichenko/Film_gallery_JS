@@ -85,8 +85,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		if (authorizedUser) {
 			localStorage.setItem('authorizedUser', JSON.stringify(authorizedUser));
 		}
-		// // location.replace('/index.html');
-		// console.log('Вот, работает');
+		// location.replace('/index.html');
 		// document.location.href = "index.html";
 	});
 

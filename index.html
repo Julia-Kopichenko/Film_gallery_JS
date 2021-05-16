@@ -5,37 +5,45 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./Style/globalStyle.css">
-  <title>film-galary</title>
+  <link rel="stylesheet" href="./Style/mainPage.css">
+  <title>film-gallery</title>
 </head>
 <body>
   <header class="header">
-		<a href="#" class="header-home-link" title="Home">
-			<svg class="header-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
+		<a href="#" class="header__home-link" title="Home">
+			<svg class="header__home-link-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" width="50px" height="50px">
 			<path style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;block-progression:tb;isolation:auto;mix-blend-mode:normal" d="M 24.962891 1.0546875 A 1.0001 1.0001 0 0 0 24.384766 1.2636719 L 1.3847656 19.210938 A 1.0005659 1.0005659 0 0 0 2.6152344 20.789062 L 4 19.708984 L 4 46 A 1.0001 1.0001 0 0 0 5 47 L 18.832031 47 A 1.0001 1.0001 0 0 0 19.158203 47 L 30.832031 47 A 1.0001 1.0001 0 0 0 31.158203 47 L 45 47 A 1.0001 1.0001 0 0 0 46 46 L 46 19.708984 L 47.384766 20.789062 A 1.0005657 1.0005657 0 1 0 48.615234 19.210938 L 41 13.269531 L 41 6 L 35 6 L 35 8.5859375 L 25.615234 1.2636719 A 1.0001 1.0001 0 0 0 24.962891 1.0546875 z M 25 3.3222656 L 44 18.148438 L 44 45 L 32 45 L 32 26 L 18 26 L 18 45 L 6 45 L 6 18.148438 L 25 3.3222656 z M 37 8 L 39 8 L 39 11.708984 L 37 10.146484 L 37 8 z M 20 28 L 30 28 L 30 45 L 20 45 L 20 28 z" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"/>
 			</svg>
 		</a>
-		<a class="button-login button" href="/autorisation.html">Sing In / Sign Up</a>
-		<div class="header-user-info-wrapper hidden" >
+		<a class="button-login button" href="/autorisation.html" aria-label ="Sing In / Sign Up">Sing In / Sign Up</a>
+		<div class="header-user-info-wrapper" >
 			<div class="header-user-info">
 				<span class="user-name"></span>
-				<button class="button-logout button">Log out</button>
+				<button class="button-logout button" aria-label ="Log out">Log out</button>
 			</div>
 		</div>
   </header>
   <main class="main">
+    <div class="film-gallery__select">
+      <select class="select">
+        <option value="popularityDown">popularity down</option>
+        <option value="ratingDown">rating down</option>
+        <option value="ratingUp">rating up</option>
+        <option value="dateReleaseDown">release date down</option>
+        <option value="dateReleaseUp">release date up</option>
+      </select>
+      <a class="button-add-film" href="#" aria-label="Add a new film" title="Add a new film">
+        <svg class="button-add-film__img" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 477.867 477.867" style="enable-background:new 0 0 477.867 477.867;" xml:space="preserve">
+          <g><path d="M392.533,0h-307.2C38.228,0.056,0.056,38.228,0,85.333v307.2c0.056,47.105,38.228,85.277,85.333,85.333h307.2	c47.105-0.056,85.277-38.228,85.333-85.333v-307.2C477.81,38.228,439.638,0.056,392.533,0z M443.733,392.533 c0,28.277-22.923,51.2-51.2,51.2h-307.2c-28.277,0-51.2-22.923-51.2-51.2v-307.2c0-28.277,22.923-51.2,51.2-51.2h307.2	c28.277,0,51.2,22.923,51.2,51.2V392.533z"/></g>
+            <g>	<path d="M324.267,221.867H256V153.6c0-9.426-7.641-17.067-17.067-17.067s-17.067,7.641-17.067,17.067v68.267H153.6	c-9.426,0-17.067,7.641-17.067,17.067S144.174,256,153.6,256h68.267v68.267c0,9.426,7.641,17.067,17.067,17.067	S256,333.692,256,324.267V256h68.267c9.426,0,17.067-7.641,17.067-17.067S333.692,221.867,324.267,221.867z"/></g>
+          </svg>
+      </a>
+    </div>
 
-    <select class="select">
-      <option value="popularityDown">popularity down</option>
-      <option value="ratingDown">rating down</option>
-      <option value="ratingUp">rating up</option>
-      <option value="dateReleaseDown">release date down</option>
-      <option value="dateReleaseUp">release date up</option>
-    </select>
-
-    <section class="film-galary film-galary__wrapper">
+    <section class="film-galary film-gallery__wrapper">
     </section>
 
-    <nav class="pagination">
+    <nav class="film-gallery__pagination pagination">
     </nav>  
 
   </main>

@@ -11,15 +11,16 @@
 // обраб.событий, который запускает скрипты, когда дом-дерево готово (Событие DOMContentLoaded происходит когда весь HTML был полностью загружен и пройден парсером, не дожидаясь окончания загрузки таблиц стилей, изображений и фреймов.)
 // в виде ф-ции запускаем скрипт, который внутри
 window.addEventListener('DOMContentLoaded', function () {
+	const body = document.querySelector('body');
 	const apiKey = '43042c8dc5edb5f45ccc79e88d4730b0';
-	let sortBy = 'popularity.desc'; // default
-	// const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}`;
 	const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=ru-RU`;
-	const filmInfoURI = '/filmInfo.html';
+	let sortBy = 'popularity.desc'; // default
 	const genresURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=ru-RU`;
-	let galary = document.querySelector('.film-galary'); // секция с фильмами
-	let pagination = document.querySelector('.pagination'); // секция с кнопками пагинации
-	const homeLink = document.querySelector('.header-home-link');
+	const filmInfoURI = '/filmInfo.html';
+	const selectElement = document.querySelector('select');
+	let galary = document.querySelector('.film-gallery__wrapper'); // секция с фильмами
+	let pagination = document.querySelector('.film-gallery__pagination'); // секция с кнопками пагинации
+	const homeLink = document.querySelector('.header__home-link');
 	const PAGE = 'page';
 	const HIDDEN = 'hidden';
 	const prevPagesId = 'prev5Pages',
@@ -34,10 +35,17 @@ window.addEventListener('DOMContentLoaded', function () {
 	const paginationSet2End = 10;
 	const paginationSet3Start = 11; // номер первой страницы третьего блока из 5ти страниц
 	const paginationSet3End = 15;
-	const buttonLogin = document.querySelector('.button-login');
 	const buttonLogout = document.querySelector('.button-logout');
-	const blockUserInfo = document.querySelector('.header-user-info-wrapper');
 	const userName = document.querySelector('.user-name');
+
+	//! Добавим админа и еще одного пользователя из файла JSON
+	let usersAll = [];
+
+	if (localStorage.getItem('users')) {
+			usersAll = JSON.parse(localStorage.getItem('users'));
+		} else {
+			localStorage.setItem('users', users);
+	}
 
 //! получим данные о юзере
 	let authorizedUser;
@@ -51,15 +59,16 @@ window.addEventListener('DOMContentLoaded', function () {
 
 	//! изменим страницу для зарегистрированного пользователя
 	if (authorizedUser) {
-		buttonLogin.classList.add('hidden');
-		blockUserInfo.classList.remove('hidden');
+		body.classList.add('autorized');
 		userName.innerHTML = nameAuthorizedUser;
+		if (isAdminAuthorizedUser){
+			body.classList.add('admin');
+		}
 	}
-
-	//! при клике на кнопку log out
+	//! Клик на кнопку log out
 	buttonLogout.addEventListener('click', function () {
-		blockUserInfo.classList.add('hidden');
-		buttonLogin.classList.remove('hidden');
+		body.classList.remove('autorized');
+		body.classList.remove('admin');
 		localStorage.removeItem('authorizedUser');
 	})
 
@@ -88,7 +97,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	function updateFilmsLocalStorage(filmList) {
 		localStorage.setItem('filmsInfo', JSON.stringify(filmList))
 	}
-	//! Предварительная предзагрузка  первых страниц (под вопросом)
+	//! Предварительная предзагрузка  первых страниц 
 	let pageNumbersArr = [1, 2, 3, 4, 5]; // страницы, которые будут сохранены в буфер
 	let buferPag1, buferPag2, buferPag3, buferPag4, buferPag5;
 	let buferArr = [buferPag1, buferPag2, buferPag3, buferPag4, buferPag5];
@@ -101,6 +110,36 @@ window.addEventListener('DOMContentLoaded', function () {
 	feelBufer(pageNumbersArr,buferArr);
 
 	createFilmCard(buferArr[0]); // грузим  сразу 1-ю страницу
+
+	//! Функция создания карточек фильмов (в параметр - промис)
+	async function createFilmCard(responsePromise) {
+		let response = await responsePromise;
+		updateFilmsLocalStorage(response);
+
+		galary.innerHTML = ''; 
+		response.forEach(element => {
+			let card = document.createElement('li');
+			let elementId = element.id;
+			card.classList.add('film-item');
+			card.innerHTML = `
+				<h2 class='film-title flex-center'>${element.title}</h2>  
+				<div class = 'film-item-wrapper'>
+				<a class='film-item-link' id=${elementId} href='${filmInfoURI}?id=${elementId}'>
+          <img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
+					<div class='by-hover'>
+					<p>Рейтинг: ${element.vote_average}</p>
+					<p>Дата релиза: ${element.release_date}</p>
+					</div>
+				</a>
+				<button class="button-remove-film button" aria-label="remove film" title="remove film">
+        <svg viewBox="0 0 74 74" width="30px" xmlns="http://www.w3.org/2000/svg"><path d="m52.175 72h-30.35a3.288 3.288 0 0 1 -3.293-3.018l-4.427-50.913 1.995-.169 4.427 50.912a1.3 1.3 0 0 0 1.298 1.188h30.35a1.3 1.3 0 0 0 1.3-1.193l4.425-50.907 1.992.173-4.424 50.908a3.288 3.288 0 0 1 -3.293 3.019z"/><path d="m62.355 18.983h-50.71a1 1 0 0 1 -1-1v-3.458a5.616 5.616 0 0 1 5.609-5.61h41.492a5.616 5.616 0 0 1 5.609 5.61v3.458a1 1 0 0 1 -1 1zm-49.711-2h48.711v-2.458a3.614 3.614 0 0 0 -3.609-3.61h-41.492a3.614 3.614 0 0 0 -3.609 3.61z"/><path d="m46.221 10.915h-18.442a1 1 0 0 1 -1-1v-2.305a5.616 5.616 0 0 1 5.611-5.61h9.22a5.616 5.616 0 0 1 5.61 5.61v2.3a1 1 0 0 1 -.999 1.005zm-17.441-2h16.441v-1.305a3.614 3.614 0 0 0 -3.611-3.61h-9.22a3.614 3.614 0 0 0 -3.61 3.61z"/><path d="m28.609 43.492h37.528v2h-37.528z" transform="matrix(.062 -.998 .998 .062 .051 89.037)"/><path d="m36 25.763h2v37.458h-2z"/><path d="m25.627 25.727h2v37.528h-2z" transform="matrix(.998 -.061 .061 .998 -2.682 1.719)"/></svg>
+      	</button>
+				</div>
+				`;
+			galary.appendChild(card);
+		});
+		addClickListenerOnGarbage();
+	}
 
 	//! Динамическая загрузка пагинации кнопок
 	function createPaginationItems(start, end) {
@@ -162,32 +201,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			currentElem.setAttribute('id', `${PAGE}${i}`);
 		}
 	}
-	//! Функция создания карточек фильмов (в параметр - промис)
-	// слово – await можно использовать только внутри async-функций.
-	// Ключевое слово await заставит интерпретатор JavaScript ждать до тех пор, пока промис справа от await не выполнится. После чего оно вернёт его результат, и выполнение кода продолжится.
 	
-	async function createFilmCard(responsePromise) {
-		let response = await responsePromise;
-		updateFilmsLocalStorage(response);
-
-		galary.innerHTML = ''; 
-		response.forEach(element => {
-			let card = document.createElement('li');
-			let elementId = element.id;
-			card.classList.add('film-item');
-			card.innerHTML = `
-				<h2 class='film-title flex-center'>${element.title}</h2>  
-				<a class='film-item-link' id=${elementId} href='${filmInfoURI}?id=${elementId}'>
-          <img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
-					<div class='by-hover'>
-					<p>Рейтинг: ${element.vote_average}</p>
-					<p>Дата релиза: ${element.release_date}</p>
-					</div>
-				</a>
-				`;
-			galary.appendChild(card);
-		});
-	}
 	//! Событие клик по кнопке "Дом"
 	homeLink.addEventListener('click',function() {
 		removeActiveClass(paginationItems); // вызов функции удалить стиль 'active' со всех айтемов
@@ -211,7 +225,6 @@ window.addEventListener('DOMContentLoaded', function () {
 	// !------------------------------------------ PAGINATION START-----------------------------------------
 
 	let paginationItems = document.querySelectorAll('.pagination-item'); // все кнопки пагинации
-	
 	//! функция перехода на секциии страниц в обоих направлениях (активный первый элемент секции)
 	function changePageSection(paginationSetStart, paginationSetEnd, isForward) {
 		updatePaginationItems(paginationSetStart, paginationSetEnd, isForward); // перерисовываем кнопки пагинации
@@ -229,7 +242,8 @@ window.addEventListener('DOMContentLoaded', function () {
 		createFilmCard(buferArr[0]);
 		addActiveClass(pagination.querySelector(`#${PAGE}${paginationSet1Start}`)); // добавляем класс Active к кнопке 1й 
 	}
-
+	
+	//! события клика по кнопкам пагинации
 	paginationItems.forEach(element => {
 
 		element.addEventListener('click', function (event) {
@@ -320,7 +334,6 @@ window.addEventListener('DOMContentLoaded', function () {
 	// !------------------------------------------ PAGINATION END-----------------------------------------
 
 	// !------------------------------------------ФИЛЬТРАЦИЯ START-----------------------------------------
-	const selectElement = document.querySelector('select');
 	selectElement.addEventListener('change', function(event) {
 		let eventTarget = event.target.value;
 
@@ -357,18 +370,24 @@ window.addEventListener('DOMContentLoaded', function () {
 	});
 	// !------------------------------------------ФИЛЬТРАЦИЯ END-----------------------------------------
 
-	//! Добавим админа и еще одного пользователя из файла JSON
-	let usersAll = [];
+	//! клик по кнопке удалить фильм
+	function addClickListenerOnGarbage() {
+		document.querySelectorAll('.button-remove-film').forEach(element => {
+	
+			element.addEventListener('click', function (event) {
+				let eventTarget = event.target;
 
-	if (localStorage.getItem('users')) {
-			usersAll = JSON.parse(localStorage.getItem('users'));
-		} else {
-			localStorage.setItem('users', users);
-		}
-		
-		// function updateUsersLocalStorage() {
-		// 	localStorage.setItem('users', JSON.stringify(usersAll));
-		// }
+				if (!eventTarget.classList.contains('button-remove-film')) {
+					eventTarget = eventTarget.parentElement;
+				}
+				let elt = eventTarget.closest('.film-item');
+				elt.style.display = 'none';
+			});
+	
+	
+		});
+	}
+	
 
 
 
