@@ -37,6 +37,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	const paginationSet3End = 15;
 	const buttonLogout = document.querySelector('.button-logout');
 	const userName = document.querySelector('.user-name');
+	let manuallyAddedFilmsArr = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
 
 	let removeFilmsArr = [];
 
@@ -75,8 +76,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	async function getResponseByPage(pageNumber, sortBy) {
 		let urlFilms = `${url}&sort_by=${sortBy}&page=${pageNumber}&vote_count.gte=10`;
 		const result = await fetch(urlFilms)
-			.then(data => data.json())
-			.then(data => data.results);
+			.then(data => data.json());
 		return result;
 	}
 
@@ -92,8 +92,8 @@ window.addEventListener('DOMContentLoaded', function () {
 	}
 	updateGenresLocalStorage(getGenres());
 
-	function updateFilmsLocalStorage(filmList) {
-		localStorage.setItem('filmsInfo', JSON.stringify(filmList))
+	function updateLocalStorage(key, object) {
+		localStorage.setItem(key, JSON.stringify(object));
 	}
 	//! Предварительная предзагрузка  первых страниц 
 	let pageNumbersArr = [1, 2, 3, 4, 5]; // страницы, которые будут сохранены в буфер
@@ -104,6 +104,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		for (let i = 0; i < pagesArr.length; i++) {
 			buferArr[i] = getResponseByPage(pagesArr[i], sortBy);
 		}
+		// console.log(buferArr);
 	}
 	feelBufer(pageNumbersArr,buferArr);
 
@@ -112,44 +113,64 @@ window.addEventListener('DOMContentLoaded', function () {
 	//! Функция создания карточек фильмов (в параметр - промис)
 	async function createFilmCard(responsePromise) {
 		let response = await responsePromise;
-		updateFilmsLocalStorage(response);
+		let requestResults = response.results;
+		let requestedPage = response.page;
+		let filmCounter = 0;
+		updateLocalStorage('filmsInfo', requestResults);
 
 		galary.innerHTML = ''; 
-		response.forEach(element => {
-			// проверка по id на то, удаленный фильм или нет
-			let card = document.createElement('li');
-			let elementId = element.id;
-			let removedArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
+
+		if (sortBy === 'popularity.desc' && manuallyAddedFilmsArr && requestedPage === 1) {
+			manuallyAddedFilmsArr.forEach(element => {
+				addFilmCard(element);
+				filmCounter++;
+			})
+		}
+
+		let removedArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
+		for (let j = 0; j < requestResults.length; j++) {
 			let isRemoved = false;
+			
+			// проверка по id на то, удаленный фильм или нет
 			if (removedArr) {
 				for (let i = 0; i < removedArr.length; i++) {
-					if (elementId == removedArr[i].id) {
+					if (requestResults[j].id == removedArr[i].id) {
 						isRemoved = true;
 						break;
 					}
 				}
 			}
 			if (!isRemoved) {
-				card.classList.add('film-item');
-				card.setAttribute('id', `${elementId}`);
-				card.innerHTML = `
-					<h2 class='film-title flex-center'>${element.title}</h2>  
-					<div class = 'film-item-wrapper'>
-					<a class='film-item-link' href='${filmInfoURI}?id=${elementId}'>
-						<img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
-						<div class='by-hover'>
-						<p>Рейтинг: ${element.vote_average}</p>
-						<p>Дата релиза: ${element.release_date}</p>
-						</div>
-					</a>
-					<button class="button-remove-film button" aria-label="remove film" title="remove film"></button>		
-					</div>
-					`;
-				galary.appendChild(card);
+				if (requestedPage === 1 && filmCounter >= 20) {
+					break;
+				}
+				addFilmCard(requestResults[j]);
+				filmCounter++;
 			}
-		});
+		}
 		addClickListenerOnGarbage();
 	}
+
+	function addFilmCard(element) {
+		let card = document.createElement('li');
+		card.classList.add('film-item');
+		card.setAttribute('id', `${element.id}`);
+		card.innerHTML = `
+			<h2 class='film-title flex-center'>${element.title}</h2>  
+			<div class = 'film-item-wrapper'>
+			<a class='film-item-link' href='${filmInfoURI}?id=${element.id}'>
+				<img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
+				<div class='by-hover'>
+				<p>Рейтинг: ${element.vote_average}</p>
+				<p>Дата релиза: ${element.release_date}</p>
+				</div>
+			</a>
+			<button class="button-remove-film button" aria-label="remove film" title="remove film"></button>		
+			</div>
+			`;
+		galary.appendChild(card);
+	}
+
 
 	//! Динамическая загрузка пагинации кнопок
 	function createPaginationItems(start, end) {
@@ -184,6 +205,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		`;
 	}
 	createPaginationItems(paginationSet1Start, paginationSet1End);
+
 	//! Функция перерисовки кнопок пагинации
 	function updatePaginationItems(start, end, isForward) {
 	// isForward - булевая переменная = true идем в прямом поряке, false - в обратном
@@ -344,40 +366,39 @@ window.addEventListener('DOMContentLoaded', function () {
 	// !------------------------------------------ PAGINATION END-----------------------------------------
 
 	// !------------------------------------------ФИЛЬТРАЦИЯ START-----------------------------------------
-	selectElement.addEventListener('change', function(event) {
+	const foo = (event) => {
 		let eventTarget = event.target.value;
-
+		
 		removeActiveClass(paginationItems); // вызов функции удалить стиль 'active' со всех айтемов
+		const caseOf = (valueSort) => {
+			sortBy = valueSort;
+			feelBufer(pageNumbersArr,buferArr);
+			showFirstPageBySort();
+		}
 		switch (eventTarget) {
 			case 'ratingDown':
-				sortBy = 'vote_average.desc';
-				feelBufer(pageNumbersArr,buferArr);
-				showFirstPageBySort();
+				caseOf('vote_average.desc')
 				break;
+
 			case 'ratingUp':
-				sortBy = 'vote_average.asc';
-				feelBufer(pageNumbersArr,buferArr);
-				showFirstPageBySort();
+				caseOf('vote_average.asc')
 				break;
+
 			case 'dateReleaseDown':
-				// sortBy = 'release_date.desc';
-				sortBy = 'primary_release_date.desc';
-				feelBufer(pageNumbersArr,buferArr);
-				showFirstPageBySort();
+				caseOf('primary_release_date.desc')
 				break;
+
 			case 'dateReleaseUp':
-				// sortBy = 'release_date.asc';
-				sortBy = 'primary_release_date.asc';
-				feelBufer(pageNumbersArr,buferArr);
-				showFirstPageBySort();
+				caseOf('primary_release_date.asc')
 				break;
+
 			case 'popularityDown':
-				sortBy = 'popularity.desc';
-				feelBufer(pageNumbersArr,buferArr);
-				showFirstPageBySort();
+				caseOf('popularity.desc')
 				break;
 		}
-	});
+	}
+	selectElement.addEventListener('change', foo);
+	
 	// !------------------------------------------ФИЛЬТРАЦИЯ END-----------------------------------------
 
 	//! клик по кнопке удалить фильм
@@ -386,31 +407,32 @@ window.addEventListener('DOMContentLoaded', function () {
 		removeFilmsArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
 	}
 
-	function updateRemoveFilmsArrLocalStorage() {
-		localStorage.setItem('removeFilmsArr', JSON.stringify(removeFilmsArr));
-	}
-
 	function addClickListenerOnGarbage() {
 		document.querySelectorAll('.button-remove-film').forEach(element => {
 	
 			element.addEventListener('click', function (event) {
 				let eventTarget = event.target;
 				let elt = eventTarget.closest('.film-item');
-				let idFilm = elt.getAttribute('id');
-				let removeFilmId = {
-					'id': idFilm,
-				}
+				let filmId = elt.getAttribute('id');
 
 				elt.style.display = 'none';
+
+				for (let i = 0; i < manuallyAddedFilmsArr.length; i++) {
+					if (filmId == manuallyAddedFilmsArr[i].id) {
+						manuallyAddedFilmsArr.splice(i, 1);
+						updateLocalStorage('manuallyAddedFilms', manuallyAddedFilmsArr);
+						return;
+					}
+				}
+				let removeFilmId = {
+					'id': filmId,
+				}
 				removeFilmsArr.push(removeFilmId);
-				updateRemoveFilmsArrLocalStorage();
+				updateLocalStorage('removeFilmsArr', removeFilmsArr);
 			});
 		});
 	}
 	
-	
-
-
 });
 
 

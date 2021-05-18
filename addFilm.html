@@ -22,7 +22,7 @@
 	</header>
 
 	<main class="main">
-		<form action="index.html">
+		<form>
 			<div class="form__container">
 				<h2 class="form__title">Add film</h2>
 				<hr size="1" color="#EEBF3A">
@@ -53,11 +53,9 @@
 					<input class="form__input" type="date" name="addFilmReleaseDate" id="addFilmReleaseDate" required>
 					<!-- release_date – дата премьеры фильма (date-picker) -->
 					
-					<!--! переделать -->
 					<label for="addFilmGenres">genres</label>
-					<input class="form__input" type="text" name="addFilmGenres" id="addFilmReleaseDate" placeholder="url" 
-					data-rule="" required>
-					<span class="confirmMessage"></span>
+					<select class="form__input" id="addFilmGenres" multiple size="4" required >
+					</select>
 					<!-- Поле genres должно иметь возможность выбрать несколько жаноров(selector) 
 						Жанры заполняются из API https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=your_key. -->
 

@@ -153,7 +153,7 @@ body.admin .film-title {
 }
 .button-login:hover,
 .button-logout:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .button-login {
@@ -169,7 +169,7 @@ body.admin .film-title {
 .button-add-film:hover,
 .button-remove-film:hover,
 .button-edit-film:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .button-add-film {
@@ -199,6 +199,30 @@ body.admin .film-title {
 }
 .select:hover {
   transform: scale(1.05);
+}
+
+.not-found__container {
+  max-width: 525px;
+  padding: 20px;
+  box-shadow: 0px 0px 22px white;
+  border-radius: 5px;
+  background: white;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+.not-found__container .not-found__title {
+  margin-bottom: 16px;
+}
+.not-found__container hr {
+  margin-bottom: 16px;
+}
+
+.not-found__title {
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 24px;
+  color: #2d333b;
+  text-align: center;
 }
 
 @media screen and (max-width: 768px) {
@@ -247,7 +271,8 @@ body.admin .film-title {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
   border: 1px solid #D6D6D6;
   border-radius: 2px;
@@ -257,23 +282,27 @@ textarea {
   padding: 9px 17px 9px 16px;
   color: #adbac7;
 }
-input:placeholder,
-textarea:placeholder {
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
   color: #6B6B6B;
 }
 input:hover,
-textarea:hover {
+textarea:hover,
+select:hover {
   border: 1px solid #FFC41E;
 }
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   outline: none;
   border: 2px auto #FFC41E;
   box-shadow: 0 0 0 2px rgba(255, 196, 30, 0.25);
   color: #000000;
 }
 input:disabled,
-textarea:disabled {
+textarea:disabled,
+select:disabled {
   background: #F2F2F2;
   color: #B3B3B3;
 }

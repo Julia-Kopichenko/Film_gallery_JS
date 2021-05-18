@@ -3,10 +3,12 @@ window.addEventListener('DOMContentLoaded', function () {
 	let element;
 	let elementId = new URLSearchParams(window.location.search).get('id');
 	let filmsJson = JSON.parse(localStorage.getItem('filmsInfo'));
+	let manuallyAddedFilms = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
 	let genresJson = JSON.parse(localStorage.getItem('genres'));
 	//! для кнопок регситрации (копипаст,но пока так)
 	const buttonLogout = document.querySelector('.button-logout');
 	const userName = document.querySelector('.user-name');
+	let manuallyAddedFilmsArr = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
 	let removeFilmsArr = [];
 	
 	//! получим данные о юзере
@@ -19,12 +21,23 @@ window.addEventListener('DOMContentLoaded', function () {
 		isAdminAuthorizedUser = authorizedUser.isAdmin;
 	}
 	
+	let filmWasFound = false;
 	filmsJson.forEach(item => {
 		if (item.id == elementId) {
 			element = item;
+			filmWasFound = true;
 			return;
 		}
 	});
+	if (!filmWasFound) {
+		manuallyAddedFilms.forEach(item => {
+			if (item.id == elementId) {
+				element = item;
+				return;
+			}
+		});
+	}
+
 	let genres = '';
 	
 	element.genre_ids.forEach(item => {
@@ -96,29 +109,39 @@ window.addEventListener('DOMContentLoaded', function () {
 	let voteCountValue = +document.querySelector('.vote-count').textContent;
 	
 	//! Меняем рейтинг и кол-во голосов
-		select.addEventListener('change', function() {
-			voteCountValue++;
-			voteCount.innerHTML = voteCountValue;
-		});
-	
-		//! при клике на корзину
-		if (localStorage.getItem('removeFilmsArr')) {
-			removeFilmsArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
-		}
-	
-		function updateRemoveFilmsArrLocalStorage() {
-			localStorage.setItem('removeFilmsArr', JSON.stringify(removeFilmsArr));
-		}
+	select.addEventListener('change', function() {
+		voteCountValue++;
+		voteCount.innerHTML = voteCountValue;
+	});
+
+	//! при клике на корзину
+	if (localStorage.getItem('removeFilmsArr')) {
+		removeFilmsArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
+	}
+
+	function updateLocalStorage(key, object) {
+		localStorage.setItem(key, JSON.stringify(object));
+	}
 	
 	function addClickListenerOnGarbage() {
 		let buttonRemove = document.querySelector('.button-remove-film');
+		let filmWasManuallyAdded = false;
 		buttonRemove.addEventListener('click', function () {
 			let removeFilmId = {
 				'id': elementId,
 			}
 
-			removeFilmsArr.push(removeFilmId);
-			updateRemoveFilmsArrLocalStorage();
+			for (let i = 0; i < manuallyAddedFilmsArr.length; i++) {
+				if (elementId == manuallyAddedFilmsArr[i].id) {
+					manuallyAddedFilmsArr.splice(i, 1);
+					updateLocalStorage('manuallyAddedFilms', manuallyAddedFilmsArr);
+					filmWasManuallyAdded = true;
+				}
+			}
+			if (!filmWasManuallyAdded) {
+				removeFilmsArr.push(removeFilmId);
+				updateLocalStorage('removeFilmsArr', removeFilmsArr);
+			}
 			// переадресуем на главную страницу
 			location.href = "/index.html";
 		});
