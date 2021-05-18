@@ -56,11 +56,9 @@ window.addEventListener('DOMContentLoaded', function () {
 				if (check) {
 					this.classList.remove('invalid');
 					this.classList.add('valid');
+
 					if (allInputsAreValid()) {
-						signinSubmitBtn.classList.remove('button-disabled');
-						signinSubmitBtn.classList.add('button-primary');
-						// signinSubmitBtn.removeAttribute('disabled');
-						signinSubmitBtn.classList.remove('disabled')
+						signinSubmitBtn.removeAttribute('disabled');
 					}
 				} else {
 					this.classList.remove('valid');
@@ -82,14 +80,11 @@ window.addEventListener('DOMContentLoaded', function () {
 		}
 		return isValid;
 	}
-	//! при нажатии на кнопку SIGN IN (не сработала)
+	//! при нажатии на кнопку SIGN IN 
 	signinSubmitBtn.addEventListener('click', function () {
 		if (authorizedUser) {
 			localStorage.setItem('authorizedUser', JSON.stringify(authorizedUser));
 		}
-		// location.replace('/index.html');
-		// document.location.href = "index.html";
 	});
-
 
 });

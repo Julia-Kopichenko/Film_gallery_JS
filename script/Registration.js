@@ -54,9 +54,6 @@ window.addEventListener('DOMContentLoaded', function () {
 					this.classList.remove('invalid');
 					this.classList.add('valid');
 					if (allInputsAreValid()) {
-						//снять аттрибут и класс disabled
-						signupSubmitBtn.classList.remove('button-disabled');
-						signupSubmitBtn.classList.add('button-primary');
 						signupSubmitBtn.removeAttribute('disabled');
 					}
 				} else {
@@ -110,9 +107,6 @@ window.addEventListener('DOMContentLoaded', function () {
 		authorizedUser.name = user.name;
 		authorizedUser.isAdmin = user.isAdmin;
 		localStorage.setItem('authorizedUser', JSON.stringify(authorizedUser));
-
-		clearForm();
-		location.href='/index.html';
 	});
 
 	//! при нажатии на кнопку Clear

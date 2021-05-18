@@ -85,11 +85,11 @@ body.autorized .header-user-info-wrapper {
 body.autorized .button-login {
   display: none;
 }
-body.admin .button-add-film, body.admin .button-edit-film {
+body.admin .button-add-film, body.admin .button-edit-film, body.admin .button-remove-film {
   display: inline-block;
 }
-body.admin .button-remove-film {
-  display: flex;
+body.admin .film-title {
+  padding-right: 50px;
 }
 
 /* ---------------------HEADER / MAIN ----------------------- */
@@ -105,9 +105,6 @@ body.admin .button-remove-film {
   align-items: center;
 }
 
-.header__home-link-img {
-  fill: #adbac7;
-}
 .header__home-link-img:hover {
   transform: scale(1.05);
 }
@@ -131,17 +128,18 @@ body.admin .button-remove-film {
 
 /*--------------------------КНОПОЧКИ------------------------------*/
 .button {
-  padding: 8px;
   border-radius: 5px;
   border: 0;
   /*сбрасываем контур (для тега button)*/
-  max-width: 175px;
+  width: 165px;
+  padding: 6px;
   overflow: hidden;
   text-align: center;
   font-family: "Roboto", Arial, sans-serif;
   font-weight: 500;
   font-size: 16px;
   color: #2d333b;
+  cursor: pointer;
 }
 .button:focus {
   outline: none;
@@ -149,15 +147,13 @@ body.admin .button-remove-film {
 
 .button-login,
 .button-logout {
-  width: 165px;
   background-color: transparent;
   color: #adbac7;
   border: 2px solid #adbac7;
-  cursor: pointer;
 }
 .button-login:hover,
 .button-logout:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .button-login {
@@ -168,45 +164,41 @@ body.admin .button-remove-film {
 .button-remove-film,
 .button-edit-film {
   display: none;
+  width: 35px;
 }
-
-.button-add-film__img,
-.button-remove-film,
-.button-edit-film {
-  fill: #adbac7;
-  margin-right: 10px;
-}
-.button-add-film__img:hover,
+.button-add-film:hover,
 .button-remove-film:hover,
 .button-edit-film:hover {
   transform: scale(1.1);
 }
 
+.button-add-film {
+  background: url(../Images/add.svg) no-repeat;
+}
+
 .button-remove-film {
-  width: 35px;
-  height: 35px;
-  margin: 0;
-  padding: 0;
-  background-color: #2d333b;
-  cursor: pointer;
+  background: url(../Images/garbage.svg) no-repeat;
+}
+
+.button-edit-film {
+  background: url(../Images/pencil.svg) no-repeat;
 }
 
 .select {
-  width: 200px;
-  height: 40px;
+  width: 175px;
+  padding: 5px;
   color: #adbac7;
   font-size: 16px;
   background-color: #2d333b;
   background-repeat: no-repeat;
   border: 2px solid #adbac7;
   border-radius: 5px;
-  padding: 8px;
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
 }
 .select:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 @media screen and (max-width: 768px) {
@@ -255,6 +247,9 @@ body.admin .button-remove-film {
   display: flex;
 }
 .film-block__img img {
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px black;
+  /*макет*/
   margin-right: 10px;
 }
 

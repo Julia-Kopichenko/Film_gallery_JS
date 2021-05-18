@@ -85,11 +85,11 @@ body.autorized .header-user-info-wrapper {
 body.autorized .button-login {
   display: none;
 }
-body.admin .button-add-film, body.admin .button-edit-film {
+body.admin .button-add-film, body.admin .button-edit-film, body.admin .button-remove-film {
   display: inline-block;
 }
-body.admin .button-remove-film {
-  display: flex;
+body.admin .film-title {
+  padding-right: 50px;
 }
 
 /* ---------------------HEADER / MAIN ----------------------- */
@@ -105,9 +105,6 @@ body.admin .button-remove-film {
   align-items: center;
 }
 
-.header__home-link-img {
-  fill: #adbac7;
-}
 .header__home-link-img:hover {
   transform: scale(1.05);
 }
@@ -131,17 +128,18 @@ body.admin .button-remove-film {
 
 /*--------------------------КНОПОЧКИ------------------------------*/
 .button {
-  padding: 8px;
   border-radius: 5px;
   border: 0;
   /*сбрасываем контур (для тега button)*/
-  max-width: 175px;
+  width: 165px;
+  padding: 6px;
   overflow: hidden;
   text-align: center;
   font-family: "Roboto", Arial, sans-serif;
   font-weight: 500;
   font-size: 16px;
   color: #2d333b;
+  cursor: pointer;
 }
 .button:focus {
   outline: none;
@@ -149,15 +147,13 @@ body.admin .button-remove-film {
 
 .button-login,
 .button-logout {
-  width: 165px;
   background-color: transparent;
   color: #adbac7;
   border: 2px solid #adbac7;
-  cursor: pointer;
 }
 .button-login:hover,
 .button-logout:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .button-login {
@@ -168,45 +164,41 @@ body.admin .button-remove-film {
 .button-remove-film,
 .button-edit-film {
   display: none;
+  width: 35px;
 }
-
-.button-add-film__img,
-.button-remove-film,
-.button-edit-film {
-  fill: #adbac7;
-  margin-right: 10px;
-}
-.button-add-film__img:hover,
+.button-add-film:hover,
 .button-remove-film:hover,
 .button-edit-film:hover {
   transform: scale(1.1);
 }
 
+.button-add-film {
+  background: url(../Images/add.svg) no-repeat;
+}
+
 .button-remove-film {
-  width: 35px;
-  height: 35px;
-  margin: 0;
-  padding: 0;
-  background-color: #2d333b;
-  cursor: pointer;
+  background: url(../Images/garbage.svg) no-repeat;
+}
+
+.button-edit-film {
+  background: url(../Images/pencil.svg) no-repeat;
 }
 
 .select {
-  width: 200px;
-  height: 40px;
+  width: 175px;
+  padding: 5px;
   color: #adbac7;
   font-size: 16px;
   background-color: #2d333b;
   background-repeat: no-repeat;
   border: 2px solid #adbac7;
   border-radius: 5px;
-  padding: 8px;
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
 }
 .select:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 @media screen and (max-width: 768px) {
@@ -236,8 +228,8 @@ body.admin .button-remove-film {
 .form__container hr {
   margin-bottom: 16px;
 }
-.form__container input {
-  margin-bottom: 5px;
+.form__container input, .form__container textarea {
+  margin-bottom: 10px;
 }
 .form__container span {
   margin-bottom: 5px;
@@ -254,32 +246,51 @@ body.admin .button-remove-film {
   text-align: center;
 }
 
-input {
+input,
+textarea {
   width: 100%;
-  height: 40px;
   border: 1px solid #D6D6D6;
   border-radius: 2px;
-  padding: 9px 17px 9px 16px;
   font-family: "Roboto", Arial, sans-serif;
   font-size: 16px;
   line-height: 140%;
+  padding: 9px 17px 9px 16px;
   color: #adbac7;
 }
-input:placeholder {
+input:placeholder,
+textarea:placeholder {
   color: #6B6B6B;
 }
-input:hover {
+input:hover,
+textarea:hover {
   border: 1px solid #FFC41E;
 }
-input:focus {
+input:focus,
+textarea:focus {
   outline: none;
   border: 2px auto #FFC41E;
   box-shadow: 0 0 0 2px rgba(255, 196, 30, 0.25);
   color: #000000;
 }
-input:disabled {
+input:disabled,
+textarea:disabled {
   background: #F2F2F2;
   color: #B3B3B3;
+}
+
+input {
+  height: 40px;
+}
+
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+
+input[type=checkbox] {
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
 }
 
 label {
@@ -298,14 +309,11 @@ label {
   /*+++*/
   display: flex;
   justify-content: space-between;
-}
-
-.button-primary,
-.button-disabled {
-  width: 180px;
+  flex-direction: row;
 }
 
 .button-primary {
+  width: 180px;
   background-color: #FBC832;
   cursor: pointer;
   background-position: 50% 50%;
@@ -334,6 +342,7 @@ label {
   /*disabled на макете*/
   color: #6B6B6B;
   background-color: #FFE28E;
+  pointer-events: none;
 }
 .button-primary:focus-visible {
   border: 3px solid #6B6B6B;
@@ -344,12 +353,6 @@ label {
   animation-iteration-count: 1;
   /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
   animation-fill-mode: forwards;
-}
-
-.button-disabled {
-  /*button-white*/
-  border: 2px solid #FBC832;
-  background-color: #F6F6F6;
 }
 
 @keyframes button-primary-hover {
@@ -401,6 +404,7 @@ a.disabled {
     align-items: center;
   }
   .form__button-type .button:first-child {
+    margin-right: 0px;
     margin-bottom: 20px;
   }
 }

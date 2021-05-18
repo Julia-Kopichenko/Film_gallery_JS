@@ -55,11 +55,12 @@ body {
 	}
 	&.admin {
 		& .button-add-film,
-		& .button-edit-film {
+		& .button-edit-film,
+		& .button-remove-film {
 			display: inline-block;
 		}
-		& .button-remove-film {
-			display: flex;
+		& .film-title {
+			padding-right: 50px;
 		}
 	}
 }
@@ -76,7 +77,6 @@ body {
 	align-items: center;
 }
 .header__home-link-img {
-  fill: $lightColor;
   &:hover {
     transform: scale(1.05);
   }
@@ -98,31 +98,28 @@ body {
 
 /*--------------------------КНОПОЧКИ------------------------------*/
 .button {
-	padding: 8px;
 	border-radius: 5px;
 	border: 0; /*сбрасываем контур (для тега button)*/
-	max-width: 175px;
+	width: 165px;
+	padding: 6px;
 	overflow: hidden; 
 	text-align: center;
 	font-family: 'Roboto', Arial, sans-serif;
 	font-weight: 500;
 	font-size: 16px;
 	color: $darkColor;
+	cursor: pointer;
 	&:focus {
 		outline: none;
 	}
 }
 .button-login,
 .button-logout {
-	width: 165px;
   background-color: transparent;
   color: $lightColor;
   border: 2px solid $lightColor;
-	cursor: pointer;
 	&:hover { 
-    // border: 1px solid $yellowColor;
-		// box-shadow: 0px 2px 8px $yellowColor; 
-    transform: scale(1.1);
+    transform: scale(1.05);
 	}
 }
 .button-login {
@@ -132,39 +129,34 @@ body {
 .button-remove-film,
 .button-edit-film {
   display: none;
-}
-.button-add-film__img,
-.button-remove-film,
-.button-edit-film {
-	fill: $lightColor;
-	margin-right: 10px;
-  &:hover {
-    transform: scale(1.1);
+	width: 35px;
+	&:hover {
+		transform: scale(1.1);
 	}
 }
-.button-remove-film {
-	width: 35px;
-	height: 35px;
-	margin: 0;
-	padding: 0;
-	background-color: $darkColor;
-	cursor: pointer;
+.button-add-film {
+	background: url(../Images/add.svg) no-repeat;
+}
+.button-remove-film { 
+	background: url(../Images/garbage.svg) no-repeat;
+}
+.button-edit-film { 
+	background: url(../Images/pencil.svg) no-repeat;
 }
 .select {
-  width: 200px;
-  height: 40px;
+  width: 175px;
+	padding: 5px;
   color: $lightColor;
   font-size: 16px;
   background-color: #2d333b;
   background-repeat: no-repeat;
   border: 2px solid $lightColor;
   border-radius: 5px;
-  padding: 8px;
   cursor: pointer;
   outline: none;
   box-sizing: border-box;
 	&:hover { 
-    transform: scale(1.1);
+    transform: scale(1.05);
 	}
 }
 @media screen and (max-width: 768px){

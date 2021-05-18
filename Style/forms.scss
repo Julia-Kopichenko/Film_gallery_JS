@@ -13,8 +13,9 @@
 	& hr { 
 		margin-bottom: 16px;
 	}
-	& input {
-		margin-bottom: 5px;
+	& input,
+	& textarea {
+		margin-bottom: 10px;
 	}
 	& span {
 		margin-bottom: 5px;
@@ -30,15 +31,16 @@
 	color: $darkColor;
 	text-align: center;
 }
-input { 
+
+input,
+textarea {
 	width: 100%;
-	height: 40px;
 	border: 1px solid #D6D6D6;
 	border-radius: 2px;
-	padding: 9px 17px 9px 16px;
 	font-family: 'Roboto', Arial, sans-serif;
 	font-size:16px;
 	line-height: 140%;
+	padding: 9px 17px 9px 16px;
 	color: $lightColor;
 	&:placeholder {
 	color: #6B6B6B;
@@ -56,6 +58,18 @@ input {
 		background: #F2F2F2;
 		color: #B3B3B3;		
 	}
+} 
+input { 
+	height: 40px;
+}
+textarea {
+	overflow: auto;
+	vertical-align: top;
+}
+input[type=checkbox] {
+	width: 15px;
+	height: 15px;
+	margin-right: 5px;
 }
 label { 
 	font-weight: 500;
@@ -72,13 +86,11 @@ label {
 .form__button-type { /*+++*/
 	display: flex;
 	justify-content: space-between;
-}
-.button-primary,
-.button-disabled {
-	width: 180px;
+	flex-direction: row;
 }
 
 .button-primary { 
+	width: 180px;
 	background-color: $yellowColor; 
 	cursor: pointer;
 	background-position: 50% 50%; /*в центрe начинаем анимацию*/
@@ -99,6 +111,7 @@ label {
 	&:disabled { /*disabled на макете*/
 	color: #6B6B6B;
 	background-color: #FFE28E;
+	pointer-events: none;
 	}
 	&:focus-visible {
 		border: 3px solid #6B6B6B;
@@ -109,10 +122,6 @@ label {
 		animation-iteration-count: 1; /*количество повторов ключевых кадров (1 по умолчанию, просто чтобы не забыть)*/
 		animation-fill-mode:forwards; 
 	}
-}
-.button-disabled { /*button-white*/
-	border: 2px solid $yellowColor;
-	background-color:#F6F6F6;;
 }
 @keyframes button-primary-hover {
 	from {
@@ -147,9 +156,6 @@ a.disabled {
 	color: #888;/* цвет текста серый */
 }
 
-
-
-
 @media screen and (max-width: 360px) {
 	.form__title {
 		font-size: 22px;
@@ -158,6 +164,7 @@ a.disabled {
 			flex-direction: column;
 			align-items: center;
 			& .button:first-child {
+				margin-right: 0px;
 				margin-bottom: 20px;
 			}
 		}

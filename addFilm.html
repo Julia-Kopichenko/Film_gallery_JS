@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./Style/forms.css">
+	<title>Добавить фильм</title>
+</head>
+<body>
+	<header class="header">
+		<a href="/index.html" class="header__home-link" title="Home">
+			<img class="header__home-link-img" src="./Images/home.svg" alt="home">
+		</a>
+		<a class="button-login button" href="/autorisation.html" aria-label ="Sing In / Sign Up">Sing In / Sign Up</a>
+		<div class="header-user-info-wrapper" >
+			<div class="header-user-info">
+				<span class="user-name"></span>
+				<button class="button-logout button" aria-label ="Log out">Log out</button>
+			</div>
+		</div>
+	</header>
+
+	<main class="main">
+		<form action="index.html">
+			<div class="form__container">
+				<h2 class="form__title">Add film</h2>
+				<hr size="1" color="#EEBF3A">
+				<div class="form__text-block">
+
+					<label for="addFilmTitle">title</label>
+					<input class="form__input" type="text" name="addFilmTitle" id="addFilmTitle" placeholder="title" 
+					data-rule="lengthFrom" data-from = "3" required>
+					<span class="confirmMessage"></span>
+					<!--должно иметь длину минимум 3 символов  -->
+
+					<label for="addFilmOverview">overview</label>
+					<textarea class="form__input" type="text" name="addFilmOverview" id="addFilmOverview" placeholder="overview" required
+					data-rule="lengthFromTo" data-from = "3" data-to = "150"></textarea>
+					<span class="confirmMessage"></span>
+					<!-- overview должно иметь длину минимум 6 символов и максимум 150 -->
+					
+					<label for="addFilmPosterPath">poster_path</label>
+					<input class="form__input" type="text" name="addFilmPosterPath" id="addFilmPosterPath" placeholder="poster_path"	required>
+	
+					<label for="addFilmPopularity">popularity</label>
+					<input class="form__input" type="text" name="addFilmPopularity" id="addFilmPopularity" placeholder="number" 
+					data-rule="number" required>
+					<span class="confirmMessage"></span>
+					<!-- popularity должно принимать только числа -->
+	
+					<label for="addFilmReleaseDate">release_date</label>
+					<input class="form__input" type="date" name="addFilmReleaseDate" id="addFilmReleaseDate" required>
+					<!-- release_date – дата премьеры фильма (date-picker) -->
+					
+					<!--! переделать -->
+					<label for="addFilmGenres">genres</label>
+					<input class="form__input" type="text" name="addFilmGenres" id="addFilmReleaseDate" placeholder="url" 
+					data-rule="" required>
+					<span class="confirmMessage"></span>
+					<!-- Поле genres должно иметь возможность выбрать несколько жаноров(selector) 
+						Жанры заполняются из API https://api.themoviedb.org/3/genre/movie/list?language=en-US&api_key=your_key. -->
+
+					<label for="addFilmVoteAverage">vote_average</label>
+					<input class="form__input" type="text" name="addFilmVoteAverage" id="addFilmVoteAverage" placeholder="number from 1 to 10" 
+					data-rule="numberTo10" required>
+					<span class="confirmMessage"></span>
+					<!-- Vote_average/vote_count должны принимать только числа. -->
+
+					<label for="addFilmVoteCount">vote_count</label>
+					<input class="form__input" type="text" name="addFilmVoteCount" id="addFilmVoteCount" placeholder="number" 
+					data-rule="number" required>
+					<span class="confirmMessage"></span>
+					<!-- Vote_average/vote_count должны принимать только числа. -->
+
+					<input class="form__input valid" type="checkbox" name="addFilmAdult" id="addFilmAdult" >
+					<label for="addFilmAdult">adult</label>
+
+				</div>
+				<div class="form__button-type">
+					<button class="button button-primary" id="addFilmButton" aria-label="Add" disabled>Add</button>
+					<button class="button button-primary" id="clearFilmButton" type="reset" aria-label="Clear">Clear</button>
+				</div>
+			</div>
+		</form>
+	</main>
+  <script src="./script/addFilms.js"></script>
+</body>
+</html>
