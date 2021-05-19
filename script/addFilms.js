@@ -174,7 +174,6 @@ window.addEventListener('DOMContentLoaded', function () {
 			'vote_count': vote_count,
 			'adult': adult
 		}
-		console.log(film);
 		manuallyAddedFilms.push(film);
 		updateManuallyAddedFilmsLocalStorage();
 	});

@@ -3,6 +3,9 @@ window.addEventListener('DOMContentLoaded', function () {
 	const signupClearBtn = document.querySelector('#signup-clear');
 	const inputs = document.querySelectorAll('input[data-rule]');
 	const psw = document.querySelector('#signup-psw');
+	let usersAll = [];
+	
+	usersAll = JSON.parse(localStorage.getItem('users'));
 	
 	//! вАЛИДАЦИЯ
 	const regEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
@@ -16,6 +19,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			// message = this.value;
 			let message = this.nextElementSibling;
 			let check;
+			let emailIsAlreadyUsed = false;
 			if (value.length > 0) {
 				switch (rule) {
 					case 'length':
@@ -29,10 +33,21 @@ window.addEventListener('DOMContentLoaded', function () {
 						break;
 					case 'email':
 						check = regEmail.test(value);
+						for (let i = 0; i < usersAll.length; i++) {
+							if (value === usersAll[i].email) {
+								emailIsAlreadyUsed = true;
+								check = false;
+								break;
+							} 
+						}
 						if (check) {
 							message.innerHTML = '';
 						} else {
-							message.innerHTML = 'Введите корректный электронный адрес';
+							if (emailIsAlreadyUsed) {
+								message.innerHTML = 'Пользователь с таким email уже зарегистрирован';
+							} else {
+								message.innerHTML = 'Введите корректный электронный адрес';
+							}
 						}
 						break;
 					case 'psw-repeat':
@@ -74,10 +89,10 @@ window.addEventListener('DOMContentLoaded', function () {
 		return isValid;
 	}
 	//! Добавим вновь зарегестрированных пользователей в локал
-	let usersAll = [];
+	// let usersAll = [];
 	let authorizedUser;
 	
-	usersAll = JSON.parse(localStorage.getItem('users'));
+	// usersAll = JSON.parse(localStorage.getItem('users'));
 	
 	function updateUsersLocalStorage() {
 		localStorage.setItem('users', JSON.stringify(usersAll));

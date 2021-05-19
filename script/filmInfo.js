@@ -4,18 +4,22 @@ window.addEventListener('DOMContentLoaded', function () {
 	let elementId = new URLSearchParams(window.location.search).get('id');
 	let filmsByPage = JSON.parse(localStorage.getItem('filmsInfo'));
 	const posterPathURL = 'https://image.tmdb.org/t/p/w200';
-	let manuallyAddedFilms = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
 	let genresAll = JSON.parse(localStorage.getItem('genres'));
 	//! для кнопок регситрации (копипаст,но пока так)
 	const buttonLogout = document.querySelector('.button-logout');
 	const userName = document.querySelector('.user-name');
-	let manuallyAddedFilmsArr = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
+	let manuallyAddedFilmsArr = [];
 	let removeFilmsArr = [];
 	
 	//! получим данные о юзере
 	let authorizedUser;
 	let nameAuthorizedUser;
 	let isAdminAuthorizedUser;
+
+	if (localStorage.getItem('manuallyAddedFilms')) {
+		manuallyAddedFilmsArr = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
+	}
+
 	if (localStorage.getItem('authorizedUser')) {
 		authorizedUser = JSON.parse(localStorage.getItem('authorizedUser'));
 		nameAuthorizedUser = authorizedUser.name;
@@ -35,7 +39,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
 	//! если в массиве фильмов с сервера данного id нет, то ищем среди админских фильмов
 	if (!filmWasFound) {
-		manuallyAddedFilms.forEach(item => {
+		manuallyAddedFilmsArr.forEach(item => {
 			if (item.id == elementId) {
 				element = item;
 				return;
@@ -60,22 +64,40 @@ window.addEventListener('DOMContentLoaded', function () {
 	<div class='film-block__img'>
 		<img class ='film-img' src=${element.poster_path ? `${posterPathURL}${element.poster_path}` : './Images/notFound200_300.jpg'} alt="${element.title}"> 
 		<button class="button-remove-film button" aria-label="remove film" title="remove film"></button>
-		<a class="button-edit-film" href="#" aria-label="Edit film" title="Edit film"></a>
+		<button class="button-edit-film button" aria-label="Edit film" title="Edit film"></button>
 	</div>
 		
 	<div class='film-block__text'>
-		<div class='flex-center'>
-			<h2 class='film-block__title'>${element.title}</h2>
+		<div>
+		<input class="edit-film__input film-block__title" type="text" name="" id="editFilmTitle" value=" ${element.title}" disabled></br>
 		</div>
-		<p><span>Жанр:</span> ${genres}</p>
-		<p><span>Популярность:</span> ${element.popularity}</p>
-		<p><span>Рейтинг:</span> ${element.vote_average}</p>
-		<p><span>Количество голосов: </span><span class="vote-count">${element.vote_count}</span> </p>
-		<p><span>Дата релиза:</span> ${element.release_date}</p>
-		<p><span>Обзор:</span> ${element.overview}</p>
-		<form class="select-average hidden" method="post">
+		<span>Жанр:</span> 
+		<input class="edit-film__input" type="text" name="" id="editFilmGenres" value=" ${genres}" disabled></br>
+
+		<span>Популярность:</span> 
+		<input class="edit-film__input active" type="text" name="" id="editFilmPopularity" value="${element.popularity}"disabled> </br>
+
+		<span>Рейтинг:</span> 
+		<input class="edit-film__input" type="text" name="" id="editFilmVoteAverage" value=" ${element.vote_average}" disabled></br>
+
+		<span>Количество голосов: </span>
+		<input class="edit-film__input vote-count" type="text" name="editFilmVoteCount" id="editFilmVoteCount" value="${element.vote_count}" disabled></br>
+
+		<span>Дата релиза:</span> 
+		<input class="edit-film__input" type="text" name="editFilmReleaseDate" id="editFilmReleaseDate" value="${element.release_date}" disabled></br>
+
+		<span>Обзор:</span></br> 
+		<textarea class="edit-film__input" type="text" name="editFilmOverview" id="editFilmFilmOverview" disabled>${element.overview}</textarea></br> 
+
+		<div class="button-wrapper">
+		<button class="button button-primary hidden" id="editFilmButtonSave" aria-label="Save">Save</button>
+		<button class="button button-primary hidden" id="editFilmButtonCancel" aria-label="Cancel">Cancel</button>
+	</div>
+
+		<form class="select-average hidden" >
+
 			<select class="select">
-				<option >Поставьте рейтинг</option>
+				<option>Поставьте рейтинг</option>
 				<option value="1">1</option>
 				<option value="2">2</option>
 				<option value="3">3</option>
@@ -87,6 +109,7 @@ window.addEventListener('DOMContentLoaded', function () {
 				<option value="9">9</option>
 				<option value="10">10</option>
 			</select>
+
 		</form>
 	</div>
 	`;
@@ -113,12 +136,15 @@ window.addEventListener('DOMContentLoaded', function () {
 	})
 	
 	let voteCount = document.querySelector('.vote-count');
-	let voteCountValue = +document.querySelector('.vote-count').textContent;
+	let voteCountValue = +document.querySelector('.vote-count').value;
+	let voteIsAccepted = false;
 	
 	//! Меняем рейтинг и кол-во голосов
 	select.addEventListener('change', function() {
+		if (voteIsAccepted) return;
 		voteCountValue++;
-		voteCount.innerHTML = voteCountValue;
+		voteCount.value = voteCountValue;
+		voteIsAccepted = true;
 	});
 
 	//! при клике на корзину
@@ -154,6 +180,55 @@ window.addEventListener('DOMContentLoaded', function () {
 			location.href = "/index.html";
 		});
 	}
+	//! Редактирование фильма
+	const buttonEdit = document.querySelector ('.button-edit-film');
+	const editFilmButtonSave = document.querySelector('#editFilmButtonSave');
+	const editFilmButtonCancel = document.querySelector('#editFilmButtonCancel');
+	// найдем все элементы с атрибутом disabled
+	let allDisabledInputs = document.querySelectorAll('[disabled]');
+	console.log(allDisabledInputs);
+	
+	buttonEdit.addEventListener('click', function () {
+		allDisabledInputs.forEach(item => {
+			item.removeAttribute('disabled');
+		});
+		editFilmButtonSave.classList.remove('hidden');
+		editFilmButtonCancel.classList.remove('hidden');
+	})
+
+	editFilmButtonCancel.addEventListener('click', function () {
+		allDisabledInputs.forEach(item => {
+			item.setAttribute('disabled', '');
+		});
+		editFilmButtonSave.classList.add('hidden');
+		editFilmButtonCancel.classList.add('hidden');
+	})
+
+	editFilmButtonSave.addEventListener('click', function () {
+		let title = document.querySelector('#editFilmTitle').value;
+		let overview = document.querySelector('#editFilmFilmOverview').value;
+		let popularity = document.querySelector('#editFilmPopularity').value;
+		let release_date = document.querySelector('#editFilmReleaseDate').value;
+		let vote_average = document.querySelector('#editFilmVoteAverage').value;
+		let vote_count = document.querySelector('#editFilmVoteCount').value;
+
+		let film = {
+			'id': Date.now(),
+			'title': title,
+			'overview': overview,
+			'poster_path': element.poster_path,
+			'popularity': popularity,
+			'release_date': release_date,
+			'genre_ids': element.genre_ids,
+			'vote_average': vote_average,
+			'vote_count': vote_count,
+			'adult': element.adult
+		}
+
+		manuallyAddedFilmsArr.push(film);
+		updateLocalStorage('manuallyAddedFilms', manuallyAddedFilmsArr);
+		location.href = "/index.html";
+	})
 
 })
 
