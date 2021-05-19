@@ -5,9 +5,9 @@ window.addEventListener('DOMContentLoaded', function () {
 	const apiKey = '43042c8dc5edb5f45ccc79e88d4730b0';
 	const url = `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&language=ru-RU`;
 	const genresURL = `https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=ru-RU`;
+	const posterPathURL = 'https://image.tmdb.org/t/p/w200';
 	const filmInfoURI = '/filmInfo.html';
 	let sortBy = 'popularity.desc'; // default
-
 	const body = document.querySelector('body');
 	const selectElement = document.querySelector('select');
 	const galary = document.querySelector('.film-gallery__wrapper'); // секция с фильмами
@@ -80,21 +80,52 @@ window.addEventListener('DOMContentLoaded', function () {
 	function updateLocalStorage(key, object) {
 		localStorage.setItem(key, JSON.stringify(object));
 	}
+	//! 
+	const loader = document.querySelector("#loading");
 
+	function displayLoading() {
+    loader.classList.add('display');
+    // остановим лоудер через некоторе время
+    setTimeout(() => {
+			loader.classList.remove('display');
+    }, 5000);
+	}
+
+	function hideLoading() {
+		loader.classList.remove("display");
+	}
 	//! Функция получения данных по запросу. Нам возвращается промис. 
 	async function getResponseByPage(pageNumber, sortBy) {
 		let urlFilms = `${url}&sort_by=${sortBy}&page=${pageNumber}&vote_count.gte=10`;
-		const result = await fetch(urlFilms)
-			.then(data => data.json());
-		return result;
+		displayLoading();
+		try {
+			const result = await fetch(urlFilms)
+			.then(data => data.json())
+
+			.then(data => {
+				hideLoading();
+				return data;
+			})
+			return result;
+			// .catch(error => alert(error.message));
+		} catch (error) {
+			alert(`В данный момент сервер не доступен. Oшибка ${error}. Попробуйте позже`);
+		} 
 	}
 
 	//! Жанры
 	async function getGenres() { 
+		try {
+
 		const result = await fetch(genresURL)
+			// декодируеь ответ в формате JSON
 			.then(data => data.json())
-			.then(data => data.genres);
-		return result;
+			.then(data => data.genres)
+			.catch(error => alert(error.message));
+			return result;
+		} catch (error) {
+			alert(`В данный момент сервер не доступен. Oшибка ${error}. Попробуйте позже`);
+		} 
 	}
 
 	async function updateGenresLocalStorage(genres) {
@@ -174,7 +205,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			<h2 class='film-title flex-center'>${element.title}</h2>  
 			<div class = 'film-item-wrapper'>
 			<a class='film-item-link' href='${filmInfoURI}?id=${element.id}'>
-				<img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
+				<img src=${element.poster_path ? `${posterPathURL}${element.poster_path}` : './Images/notFound200_300.jpg'} alt='${element.title}' class='film-item-img'>
 				<div class='by-hover'>
 				<p>Рейтинг: ${element.vote_average}</p>
 				<p>Дата релиза: ${element.release_date}</p>
@@ -447,28 +478,35 @@ window.addEventListener('DOMContentLoaded', function () {
 
 	function addClickListenerOnGarbage() {
 		document.querySelectorAll('.button-remove-film').forEach(element => {
-	
-			element.addEventListener('click', function (event) {
-				let eventTarget = event.target;
-				let elt = eventTarget.closest('.film-item');
-				let filmId = elt.getAttribute('id');
-
-				elt.style.display = 'none';
-
-				for (let i = 0; i < manuallyAddedFilmsArr.length; i++) {
-					if (filmId == manuallyAddedFilmsArr[i].id) {
-						manuallyAddedFilmsArr.splice(i, 1);
-						updateLocalStorage('manuallyAddedFilms', manuallyAddedFilmsArr);
-						return;
-					}
-				}
-				let removeFilmId = {
-					'id': filmId,
-				}
-				removeFilmsArr.push(removeFilmId);
-				updateLocalStorage('removeFilmsArr', removeFilmsArr);
-			});
+			element.addEventListener('click', clickByGarbage)	
 		});
+	}
+
+	function clickByGarbage(event) {
+		let eventTarget = event.target;
+		let eltLi = eventTarget.closest('.film-item');
+		let filmId = eltLi.getAttribute('id');
+
+		eltLi.style.display = 'none';
+		// если удаляется фильм, добавленный админом, то удаляем его из локала
+		removeManuallyAddedFilm ( filmId, manuallyAddedFilmsArr );
+		// если не админский фильм, то добавялем объект с его id в локал, чтобы после не отображать его при загрузке страницы
+		let removeFilmId = {
+			'id': filmId,
+		}
+
+		removeFilmsArr.push(removeFilmId);
+		updateLocalStorage('removeFilmsArr', removeFilmsArr);
+	}
+
+	function removeManuallyAddedFilm (filmId, filmsArr) {
+		for (let i = 0; i < filmsArr.length; i++) {
+			if (filmId == filmsArr[i].id) {
+				filmsArr.splice(i, 1);
+				updateLocalStorage('manuallyAddedFilms', filmsArr);
+				return;
+			}
+		}
 	}
 	
 });

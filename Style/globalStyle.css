@@ -64,6 +64,34 @@ a {
   align-items: center;
 }
 
+/*для лоудера*/
+#loading {
+  width: 2rem;
+  height: 2rem;
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  border: 5px solid #f3f3f3;
+  border-top: 6px solid #FBC832;
+  border-radius: 100%;
+  margin: auto;
+  visibility: hidden;
+  animation: spin 1s infinite linear;
+}
+
+#loading.display {
+  visibility: visible;
+  z-index: 999;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 body {
   font-family: "Roboto", Arial, sans-serif;
   font-size: 16px;
@@ -78,7 +106,6 @@ body {
 body header {
   margin-bottom: 15px;
 }
-
 body.autorized .header-user-info-wrapper {
   display: block;
 }
@@ -165,6 +192,7 @@ body.admin .film-title {
 .button-edit-film {
   display: none;
   width: 35px;
+  height: 35px;
 }
 .button-add-film:hover,
 .button-remove-film:hover,

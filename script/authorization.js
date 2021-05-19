@@ -7,8 +7,6 @@ window.addEventListener('DOMContentLoaded', function () {
 	
 	usersAll = JSON.parse(localStorage.getItem('users'));
 
-
-	//-----------------
 	//! вАЛИДАЦИЯ 
 	for (let input of inputs) {
 		// input.addEventListener('blur', function () {
@@ -22,6 +20,8 @@ window.addEventListener('DOMContentLoaded', function () {
 			let check;
 			
 			if (value.length > 0) {
+				let emailInputValue;
+
 				switch (rule) {
 					case 'isExistingUser':
 						for (let i = 0; i < usersAll.length; i++) {
@@ -35,13 +35,14 @@ window.addEventListener('DOMContentLoaded', function () {
 							}
 						}
 						break;
+
 					case 'CorrectPsw':
-						let emailInputValue = document.querySelector('#email').value;
+						emailInputValue = document.querySelector('#email').value;
+
 						for (let i = 0; i < usersAll.length; i++) {
 							if (emailInputValue === usersAll[i].email && value === usersAll[i].password) {
 								check = true;
 								message.innerHTML = '';
-
 								authorizedUser = {};
 								authorizedUser.name = usersAll[i].name;
 								authorizedUser.isAdmin = usersAll[i].isAdmin;
@@ -53,6 +54,7 @@ window.addEventListener('DOMContentLoaded', function () {
 						}
 						break;
 				}
+
 				if (check) {
 					this.classList.remove('invalid');
 					this.classList.add('valid');
@@ -86,5 +88,4 @@ window.addEventListener('DOMContentLoaded', function () {
 			localStorage.setItem('authorizedUser', JSON.stringify(authorizedUser));
 		}
 	});
-
 });

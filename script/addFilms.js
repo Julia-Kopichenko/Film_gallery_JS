@@ -10,7 +10,6 @@ window.addEventListener('DOMContentLoaded', function () {
 	let genresJson = JSON.parse(localStorage.getItem('genres'));
 	let manuallyAddedFilms = [];
 
-
 //! заполнение селекта жанров фильма
 	let select = document.querySelector('#addFilmGenres');
 	select.innerHTML = '';
@@ -47,11 +46,10 @@ window.addEventListener('DOMContentLoaded', function () {
 	})
 
 	//! вАЛИДАЦИЯ
-	// let inputs = document.querySelectorAll('[data-rule]');
-	let inputs = document.querySelectorAll('.form__input');
+	const inputs = document.querySelectorAll('.form__input');
 	// let regNumber = /^\d+$/; // любое положительное число (в том числе и дробное). popularity
-	let regNumber = /^[-+]?[0-9]*[.,]?[0-9]+(?:[eE][-+]?[0-9]+)?$/; // любое положительное число (в том числе и дробное). popularity
-	let regNumberTo10 = /^([1-9]|1[0])$/; // целое число от 0 до 10(включительно)
+	const regNumber = /^[-+]?[0-9]*[.,]?[0-9]+(?:[eE][-+]?[0-9]+)?$/; // любое положительное число (в том числе и дробное). popularity
+	const regNumberTo10 = /^([1-9]|1[0])$/; // целое число от 0 до 10(включительно)
 
 	
 	for (let input of inputs) {
@@ -131,6 +129,7 @@ window.addEventListener('DOMContentLoaded', function () {
 	function allInputsAreValid() {
 		let isValid = true;
 		let allInputs = document.querySelectorAll('.form__input');
+
 		for (let i = 0; i < allInputs.length; i++) {
 			if(!allInputs[i].classList.contains('valid')) {
 				isValid = false;
@@ -192,5 +191,4 @@ window.addEventListener('DOMContentLoaded', function () {
 			addFilmButton.setAttribute('disabled');
 		})
 	}
-
 })

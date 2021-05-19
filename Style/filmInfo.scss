@@ -30,12 +30,15 @@
 }
 .film-block__img {
   display: flex;
-  & img {
-		border-radius: 5px;
-		box-shadow: 0px 4px 8px black; /*макет*/
-
+  & .film-img {
     margin-right: 10px;
   }
+}
+.film-img {
+  border-radius: 5px;
+  box-shadow: 0px 4px 8px black; /*макет*/
+  width: 200px;
+  height: 300px;
 }
 .film-block__text {
   width: 60%;

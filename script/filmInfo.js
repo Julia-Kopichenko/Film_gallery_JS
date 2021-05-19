@@ -2,9 +2,10 @@ window.addEventListener('DOMContentLoaded', function () {
 	const filmInfo = document.querySelector('.film-block');
 	let element;
 	let elementId = new URLSearchParams(window.location.search).get('id');
-	let filmsJson = JSON.parse(localStorage.getItem('filmsInfo'));
+	let filmsByPage = JSON.parse(localStorage.getItem('filmsInfo'));
+	const posterPathURL = 'https://image.tmdb.org/t/p/w200';
 	let manuallyAddedFilms = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
-	let genresJson = JSON.parse(localStorage.getItem('genres'));
+	let genresAll = JSON.parse(localStorage.getItem('genres'));
 	//! для кнопок регситрации (копипаст,но пока так)
 	const buttonLogout = document.querySelector('.button-logout');
 	const userName = document.querySelector('.user-name');
@@ -21,14 +22,18 @@ window.addEventListener('DOMContentLoaded', function () {
 		isAdminAuthorizedUser = authorizedUser.isAdmin;
 	}
 	
+	//! проверим по наличию данного id в массиве фильмов с сервера
 	let filmWasFound = false;
-	filmsJson.forEach(item => {
+
+	filmsByPage.forEach(item => {
 		if (item.id == elementId) {
 			element = item;
 			filmWasFound = true;
 			return;
 		}
 	});
+
+	//! если в массиве фильмов с сервера данного id нет, то ищем среди админских фильмов
 	if (!filmWasFound) {
 		manuallyAddedFilms.forEach(item => {
 			if (item.id == elementId) {
@@ -38,10 +43,11 @@ window.addEventListener('DOMContentLoaded', function () {
 		});
 	}
 
+	//! Надем жанпы фильма (из массива со всеми  жанрами)
 	let genres = '';
 	
 	element.genre_ids.forEach(item => {
-		genresJson.forEach(innerItem => {
+		genresAll.forEach(innerItem => {
 			if (item == innerItem.id) {
 				genres += innerItem.name + ', ';
 			}
@@ -49,9 +55,10 @@ window.addEventListener('DOMContentLoaded', function () {
 	});
 	genres = genres.slice(0, -2);
 	
+	//! прорисуем карточку фильма, его инфу и селект
 	filmInfo.innerHTML = `
 	<div class='film-block__img'>
-		<img src=${element.poster_path ? `https://image.tmdb.org/t/p/w200${element.poster_path}` : './Images/notFound200_300.jpg'} alt="${element.title}"> 
+		<img class ='film-img' src=${element.poster_path ? `${posterPathURL}${element.poster_path}` : './Images/notFound200_300.jpg'} alt="${element.title}"> 
 		<button class="button-remove-film button" aria-label="remove film" title="remove film"></button>
 		<a class="button-edit-film" href="#" aria-label="Edit film" title="Edit film"></a>
 	</div>
@@ -138,11 +145,12 @@ window.addEventListener('DOMContentLoaded', function () {
 					filmWasManuallyAdded = true;
 				}
 			}
+
 			if (!filmWasManuallyAdded) {
 				removeFilmsArr.push(removeFilmId);
 				updateLocalStorage('removeFilmsArr', removeFilmsArr);
 			}
-			// переадресуем на главную страницу
+			
 			location.href = "/index.html";
 		});
 	}

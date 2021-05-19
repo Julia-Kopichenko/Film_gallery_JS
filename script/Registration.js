@@ -1,17 +1,13 @@
 window.addEventListener('DOMContentLoaded', function () {
 	const signupSubmitBtn = document.querySelector('#signup-submit');
 	const signupClearBtn = document.querySelector('#signup-clear');
+	const inputs = document.querySelectorAll('input[data-rule]');
+	const psw = document.querySelector('#signup-psw');
 	
 	//! вАЛИДАЦИЯ
-	let regEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
-
-	// Метод test() выполняет поиск сопоставления регулярного выражения указанной строке. Возвращает true или false.
-	// найдем все инпуты, которые должны валидировать свое содержимое (у которых есть data-rule)
-	let inputs = document.querySelectorAll('input[data-rule]');
-	let psw = document.querySelector('#signup-psw');
+	const regEmail = /^[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}$/i;
 	
 	for (let input of inputs) {
-		// input.addEventListener('blur', function () {
 		input.oninput = function() {
 			// прочитаем правило
 			let rule = this.dataset.rule;
@@ -61,22 +57,14 @@ window.addEventListener('DOMContentLoaded', function () {
 					this.classList.add('invalid');
 				}
 			}
-			
 		};
 	}
-
-	let usersAll = [];
-	let authorizedUser;
 	
-	usersAll = JSON.parse(localStorage.getItem('users'));
-	
-	function updateUsersLocalStorage() {
-		localStorage.setItem('users', JSON.stringify(usersAll));
-	}
 	//! функция проверки на валидность всех полей
 	function allInputsAreValid() {
 		let isValid = true;
 		let allInputs = document.querySelectorAll('input');
+
 		for (let i = 0; i < allInputs.length; i++) {
 			if(!allInputs[i].classList.contains('valid')) {
 				isValid = false;
@@ -85,7 +73,15 @@ window.addEventListener('DOMContentLoaded', function () {
 		}
 		return isValid;
 	}
+	//! Добавим вновь зарегестрированных пользователей в локал
+	let usersAll = [];
+	let authorizedUser;
 	
+	usersAll = JSON.parse(localStorage.getItem('users'));
+	
+	function updateUsersLocalStorage() {
+		localStorage.setItem('users', JSON.stringify(usersAll));
+	}
 	//! при нажатии на кнопку SIGN UP
 	signupSubmitBtn.addEventListener('click', function () {
 		let name = document.querySelector('#signup-name').value;
@@ -99,6 +95,7 @@ window.addEventListener('DOMContentLoaded', function () {
 			'email': email,
 			'isAdmin': false
 		}
+
 		usersAll.push(user);
 		updateUsersLocalStorage();
 
@@ -122,8 +119,4 @@ window.addEventListener('DOMContentLoaded', function () {
 			input.nextElementSibling.innerHTML = '';
 		})
 	}
-
-
-
-
 });
