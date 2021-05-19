@@ -169,8 +169,11 @@ window.addEventListener('DOMContentLoaded', function () {
 			})
 		}
 		// проверяем в локале удаленные админом фильмы
-		let removedArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
-
+		let removedArr = [];
+		if (localStorage.getItem('removeFilmsArr')) {
+			removedArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
+		}
+		
 		for (let j = 0; j < requestResults.length; j++) {
 			let isRemoved = false;
 			
