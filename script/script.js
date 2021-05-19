@@ -29,7 +29,11 @@ window.addEventListener('DOMContentLoaded', function () {
 	const paginationSet3Start = 11; // номер первой страницы третьего блока из 5ти страниц
 	const paginationSet3End = 15;
 
-	let manuallyAddedFilmsArr = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
+	let manuallyAddedFilmsArr = []
+
+	if (localStorage.getItem('manuallyAddedFilms')) {
+		manuallyAddedFilmsArr = JSON.parse(localStorage.getItem('manuallyAddedFilms'));
+	}
 	let removeFilmsArr = [];
 
 	//! Добавим админа и еще одного пользователя из файла JSON
@@ -173,7 +177,7 @@ window.addEventListener('DOMContentLoaded', function () {
 		if (localStorage.getItem('removeFilmsArr')) {
 			removedArr = JSON.parse(localStorage.getItem('removeFilmsArr'));
 		}
-		
+
 		for (let j = 0; j < requestResults.length; j++) {
 			let isRemoved = false;
 			
