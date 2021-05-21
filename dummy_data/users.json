@@ -1,0 +1,1 @@
+users = '[{"name" : "admin", "surName" : "admin", "password" : "1234567", "email" : "email@admin.com", "isAdmin" : true},{"name" : "Valentina", "surName" : "Petrova", "password" : "123456789", "email" : "valentina@gmail.com", "isAdmin" : false}]'

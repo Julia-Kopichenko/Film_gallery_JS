@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./Style/globalStyle.css">
+  <link rel="stylesheet" href="./Style/mainPage.css">
+  <title>film-gallery</title>
+</head>
+<body>
+  <div id="loading"></div>
+  <header class="header">
+		<a href="#" class="header__home-link" title="Home">
+			<img class="header__home-link-img" src="./Images/home.svg" alt="home">
+		</a>
+		<a class="button-login button" href="/autorisation.html" aria-label ="Sing In / Sign Up">Sing In / Sign Up</a>
+		<div class="header-user-info-wrapper" >
+			<div class="header-user-info">
+				<span class="user-name"></span>
+				<button class="button-logout button" aria-label ="Log out">Log out</button>
+			</div>
+		</div>
+  </header>
+  <main class="main">
+    <div class="film-gallery__select">
+      <select class="select">
+        <option value="popularityDown">popularity down</option>
+        <option value="ratingDown">rating down</option>
+        <option value="ratingUp">rating up</option>
+        <option value="dateReleaseDown">release date down</option>
+        <option value="dateReleaseUp">release date up</option>
+      </select>
+      <a class="button-add-film" href="addFilm.html" aria-label="Add a new film" title="Add a new film"></a>
+    </div>
+
+    <section class="film-galary film-gallery__wrapper">
+    </section>
+
+    <nav class="film-gallery__pagination pagination">
+    </nav>  
+
+  </main>
+	<script type="text/javascript" src="dummy_data/users.json"></script>
+  <script src="./script/script.js"></script>
+</body>
+</html>

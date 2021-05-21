@@ -1,0 +1,223 @@
+@import "fonts.scss";
+@import "normalize.css";
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit; 
+}
+input, textarea, select { font-family:inherit; font-size:inherit;font-weight:inherit;line-height:inherit}
+html {
+	box-sizing: border-box; 
+}
+
+$lightColor: #adbac7;
+$darkColor: #2d333b;
+$yellowColor:#FBC832;
+a {
+	background: transparent;
+	text-decoration: none;
+}
+.visibility-hidden {
+  visibility: hidden;
+}
+.hidden {
+  display: none;
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/*для лоудера*/
+#loading {
+	width: 2rem;
+	height: 2rem;
+	position: fixed;
+	top: 50%;
+	right: 50%;
+	border: 5px solid #f3f3f3;
+	border-top: 6px solid $yellowColor;
+	border-radius: 100%;
+	margin: auto;
+	visibility: hidden;
+	animation: spin 1s infinite linear;
+}
+#loading.display {
+	visibility: visible;
+	z-index: 999;
+}
+@keyframes spin {
+	from {
+			transform: rotate(0deg);
+	}
+	to {
+			transform: rotate(360deg);
+	}
+}
+
+body {
+	font-family: 'Roboto', Arial, sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 19px;
+	color: $lightColor;
+  max-width: 1440px;
+	padding: 20px;
+  margin: 0 auto;
+  background-color: $darkColor;
+	& header {
+		margin-bottom: 15px;
+	}
+	&.autorized {
+		& .header-user-info-wrapper {
+			display: block;
+		}
+		& .button-login {
+			display: none;
+		}
+	}
+	&.admin {
+		& .button-add-film,
+		& .button-edit-film,
+		& .button-remove-film {
+			display: inline-block;
+		}
+		& .film-title {
+			padding-right: 50px;
+		}
+	}
+}
+
+/* ---------------------HEADER / MAIN ----------------------- */
+.header, .main {
+  max-width: 90%;
+  margin: 0 auto;
+}
+.header {
+  height: 100px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.header__home-link-img {
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+.header-user-info-wrapper {
+	display: none;
+}
+.header-user-info {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	& .user-name {
+		margin-right: 20px;
+	}
+}
+.user-name {
+	font-size: 19px;
+}
+
+/*--------------------------КНОПОЧКИ------------------------------*/
+.button {
+	border-radius: 5px;
+	border: 0; /*сбрасываем контур (для тега button)*/
+	width: 165px;
+	padding: 6px;
+	overflow: hidden; 
+	text-align: center;
+	font-family: 'Roboto', Arial, sans-serif;
+	font-weight: 500;
+	font-size: 16px;
+	color: $darkColor;
+	cursor: pointer;
+	&:focus {
+		outline: none;
+	}
+}
+.button-login,
+.button-logout {
+  background-color: transparent;
+  color: $lightColor;
+  border: 2px solid $lightColor;
+	&:hover { 
+    transform: scale(1.1);
+	}
+}
+.button-login {
+	display: block;
+}
+.button-add-film,
+.button-remove-film,
+.button-edit-film {
+  display: none;
+	width: 35px;
+	height: 35px;
+	&:hover {
+		transform: scale(1.05);
+	}
+}
+.button-add-film {
+	background: url(../Images/add.svg) no-repeat;
+}
+.button-remove-film { 
+	background: url(../Images/garbage.svg) no-repeat;
+}
+.button-edit-film { 
+	background: url(../Images/pencil.svg) no-repeat;
+}
+.select {
+  width: 175px;
+	padding: 5px;
+  color: $lightColor;
+  font-size: 16px;
+  background-color: #2d333b;
+  background-repeat: no-repeat;
+  border: 2px solid $lightColor;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+	&:hover { 
+    transform: scale(1.05);
+	}
+}
+
+.not-found__container { 
+	max-width: 525px; 
+	padding: 20px;
+	box-shadow: 0px 0px 22px white;
+	border-radius: 5px;
+	background: white;
+	margin: 0 auto; 
+	margin-top: 50px;
+	& .not-found__title { 
+		margin-bottom: 16px;
+	}
+	& hr { 
+		margin-bottom: 16px;
+	}
+}
+.not-found__title { 
+	font-weight: 600;
+	font-size: 28px;
+	line-height: 24px;
+	color: $darkColor;
+	text-align: center;
+}
+
+
+
+@media screen and (max-width: 768px){
+	.header, .main {
+		max-width: 100%;
+	}
+	.header {
+		height: 70px;
+	}
+	.button {
+		font-size: 16px;
+	}
+}

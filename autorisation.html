@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./Style/forms.css">
+	<title>Авторизация</title>
+</head>
+<body>
+	<header class="header">
+		<a href="/index.html" class="header__home-link" title="Home">
+			<img class="header__home-link-img" src="./Images/home.svg" alt="home">
+		</a>
+  </header>
+
+	<main class="main">
+		<form id="authorization-form" action="index.html">
+			<div class="form__container">
+				<h2 class="form__title">Sign In</h2>
+				<hr size="1" color="#EEBF3A">
+				<div class="form__text-block">
+
+					<label for="email">Email</label>
+					<input type="text" name="email" id="email" placeholder="Email" 
+					data-rule="isExistingUser" required>
+					<span class="confirmMessage"></span>
+
+					<label for="psw">Password</label>
+					<input type="password" name="psw" id="psw" placeholder="Password" 
+					data-rule="CorrectPsw" required>
+					<span class="confirmMessage"></span>
+
+				</div>
+				<div class="form__button-type">
+					<button id="signin-submit" class="button button-primary" disabled>Sign In</button>
+					<a id="registration-btn" class="button button-primary" href="/registration.html">Registration</a>
+				</div>
+			</div>
+		</form>
+	</main>
+	
+  <script src="./script/authorization.js"></script>
+</body>
+</html>
+<!-- <a id="signin-submit" class="button button-disabled disabled" href="/index.html">Sign In</a> -->

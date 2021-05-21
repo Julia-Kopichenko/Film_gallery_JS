@@ -1,0 +1,270 @@
+@charset "UTF-8";
+@import "normalize.css";
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/roboto-v20-latin-regular.woff2") format("woff2"), url("../fonts/roboto-v20-latin-regular.woff") format("woff");
+  /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 500;
+  src: local(""), url("../fonts/roboto-v20-latin-500.woff2") format("woff2"), url("../fonts/roboto-v20-latin-500.woff") format("woff");
+  /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 700;
+  src: local(""), url("../fonts/roboto-v20-latin-700.woff2") format("woff2"), url("../fonts/roboto-v20-latin-700.woff") format("woff");
+  /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+@font-face {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 900;
+  src: local(""), url("../fonts/roboto-v20-latin-900.woff2") format("woff2"), url("../fonts/roboto-v20-latin-900.woff") format("woff");
+  /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+a {
+  background: transparent;
+  text-decoration: none;
+}
+
+.visibility-hidden {
+  visibility: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*для лоудера*/
+#loading {
+  width: 2rem;
+  height: 2rem;
+  position: fixed;
+  top: 50%;
+  right: 50%;
+  border: 5px solid #f3f3f3;
+  border-top: 6px solid #FBC832;
+  border-radius: 100%;
+  margin: auto;
+  visibility: hidden;
+  animation: spin 1s infinite linear;
+}
+
+#loading.display {
+  visibility: visible;
+  z-index: 999;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19px;
+  color: #adbac7;
+  max-width: 1440px;
+  padding: 20px;
+  margin: 0 auto;
+  background-color: #2d333b;
+}
+body header {
+  margin-bottom: 15px;
+}
+body.autorized .header-user-info-wrapper {
+  display: block;
+}
+body.autorized .button-login {
+  display: none;
+}
+body.admin .button-add-film, body.admin .button-edit-film, body.admin .button-remove-film {
+  display: inline-block;
+}
+body.admin .film-title {
+  padding-right: 50px;
+}
+
+/* ---------------------HEADER / MAIN ----------------------- */
+.header, .main {
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.header {
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__home-link-img:hover {
+  transform: scale(1.05);
+}
+
+.header-user-info-wrapper {
+  display: none;
+}
+
+.header-user-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.header-user-info .user-name {
+  margin-right: 20px;
+}
+
+.user-name {
+  font-size: 19px;
+}
+
+/*--------------------------КНОПОЧКИ------------------------------*/
+.button {
+  border-radius: 5px;
+  border: 0;
+  /*сбрасываем контур (для тега button)*/
+  width: 165px;
+  padding: 6px;
+  overflow: hidden;
+  text-align: center;
+  font-family: "Roboto", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #2d333b;
+  cursor: pointer;
+}
+.button:focus {
+  outline: none;
+}
+
+.button-login,
+.button-logout {
+  background-color: transparent;
+  color: #adbac7;
+  border: 2px solid #adbac7;
+}
+.button-login:hover,
+.button-logout:hover {
+  transform: scale(1.1);
+}
+
+.button-login {
+  display: block;
+}
+
+.button-add-film,
+.button-remove-film,
+.button-edit-film {
+  display: none;
+  width: 35px;
+  height: 35px;
+}
+.button-add-film:hover,
+.button-remove-film:hover,
+.button-edit-film:hover {
+  transform: scale(1.05);
+}
+
+.button-add-film {
+  background: url(../Images/add.svg) no-repeat;
+}
+
+.button-remove-film {
+  background: url(../Images/garbage.svg) no-repeat;
+}
+
+.button-edit-film {
+  background: url(../Images/pencil.svg) no-repeat;
+}
+
+.select {
+  width: 175px;
+  padding: 5px;
+  color: #adbac7;
+  font-size: 16px;
+  background-color: #2d333b;
+  background-repeat: no-repeat;
+  border: 2px solid #adbac7;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+}
+.select:hover {
+  transform: scale(1.05);
+}
+
+.not-found__container {
+  max-width: 525px;
+  padding: 20px;
+  box-shadow: 0px 0px 22px white;
+  border-radius: 5px;
+  background: white;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+.not-found__container .not-found__title {
+  margin-bottom: 16px;
+}
+.not-found__container hr {
+  margin-bottom: 16px;
+}
+
+.not-found__title {
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 24px;
+  color: #2d333b;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .header, .main {
+    max-width: 100%;
+  }
+
+  .header {
+    height: 70px;
+  }
+
+  .button {
+    font-size: 16px;
+  }
+}
+
+/*# sourceMappingURL=globalStyle.css.map */
